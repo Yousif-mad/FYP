@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Maintenance Work Orders Calendar</title>
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+  <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+/>
+  <style>
+    .sidebar {
+    
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 100px;
+    background-color: #2f3e4e;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+  }
+
+  /* Nav items container */
+  .nav-item {
+    color: #a9b3c1;
+    text-align: center;
+    margin: 20px 0;
+    cursor: pointer;
+    width: 70px;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    border-radius: 12px;
+    padding: 10px 0;
+  }
+
+  /* Icon style */
+  .nav-item i {
+    font-size: 28px;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  /* Text below icon */
+  .nav-item span {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  /* Hover effect */
+  .nav-item:hover {
+    color: #ffffff;
+    background-color: #1e90ff;
+    box-shadow: 0 4px 12px rgba(30,144,255,0.6);
+  }
+
+  /* Active state */
+  .nav-item.active {
+    color: #ffffff;
+    background-color: #007acc;
+    box-shadow: 0 4px 15px rgba(0,122,204,0.8);
+  }
+    body {
+    
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 20px;
+      background: #f9fafb;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2c3e50;
+      user-select: none;
+    }
+    #calendar {
+      opacity: 0.9;
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgb(0 0 0 / 0.1);
+      padding: 10px;
+      cursor: default;
+    }
+    .fc-event {
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      border-radius: 6px;
+      padding: 2px 5px;
+      font-weight: 600;
+    }
+    .fc-event:hover {
+      background-color: #3498db !important;
+      color: white !important;
+      box-shadow: 0 0 8px #2980b9;
+    }
+    button#addOrderBtn {
+      display: block;
+      margin: 0 auto 25px auto;
+      padding: 12px 25px;
+      font-size: 1.1rem;
+      border: none;
+      background: #27ae60;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 3px 6px rgb(0 0 0 / 0.2);
+      user-select: none;
+    }
+    button#addOrderBtn:hover {
+      background: #2ecc71;
+    }
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+    .modal-content {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 8px 24px rgb(0 0 0 / 0.2);
+      max-width: 900px;
+      width: 95%;
+      max-height: 90vh;
+      display: flex;
+      overflow: hidden;
+      user-select: none;
+    }
+    form#workOrderForm {
+      flex: 2;
+      padding: 25px 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      overflow-y: auto;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .form-group label {
+      font-weight: 600;
+      color: #34495e;
+      user-select: text;
+    }
+    input[type="text"],
+    input[type="date"],
+    select,
+    textarea {
+      padding: 8px 10px;
+      font-size: 1rem;
+      border: 1.8px solid #ccc;
+      border-radius: 6px;
+      transition: border-color 0.3s ease;
+      resize: vertical;
+    }
+    input[type="text"]:focus,
+    input[type="date"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #2980b9;
+      outline: none;
+      box-shadow: 0 0 6px #3498db;
+    }
+    textarea {
+      min-height: 80px;
+      font-family: inherit;
+    }
+    /* Disabled Part field */
+    select[disabled] {
+      background: #f0f0f0;
+      color: #7f8c8d;
+      cursor: not-allowed;
+    }
+    .button-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    button[type="submit"], button#cancelBtn {
+      flex: 1;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 700;
+      user-select: none;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 3px 6px rgb(0 0 0 / 0.1);
+    }
+    button[type="submit"] {
+      background-color: #2980b9;
+      color: white;
+    }
+    button[type="submit"]:hover {
+      background-color: #3498db;
+    }
+    button#cancelBtn {
+      background-color: #bdc3c7;
+      color: #2c3e50;
+    }
+    button#cancelBtn:hover {
+      background-color: #95a5a6;
+    }
+
+    /* Status select */
+    select#orderStatus {
+      font-weight: 600;
+      color: #34495e;
+    }
+
+    /* Right panel - Chat */
+    .right-panel {
+      flex: 1;
+      background: #f5f8fa;
+      border-left: 1px solid #ddd;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .right-panel h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-weight: 700;
+      color: #2c3e50;
+      user-select: text;
+      border-bottom: 2px solid #2980b9;
+      padding-bottom: 6px;
+    }
+    #chatMessages {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 10px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      background: white;
+      box-shadow: inset 0 0 8px rgb(0 0 0 / 0.05);
+    }
+    .chat-message {
+      margin-bottom: 12px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: #ecf0f1;
+      color: #2c3e50;
+      user-select: text;
+      word-wrap: break-word;
+    }
+    .chat-message .meta {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #7f8c8d;
+      margin-bottom: 4px;
+      user-select: text;
+    }
+    #chatInput {
+      border: 1.5px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+      font-size: 1rem;
+      width: 100%;
+      box-sizing: border-box;
+      resize: none;
+      height: 50px;
+      transition: border-color 0.3s ease;
+    }
+    #chatInput:focus {
+      border-color: #2980b9;
+      outline: none;
+      box-shadow: 0 0 6px #3498db;
+    }
+    #sendChatBtn {
+      margin-top: 8px;
+      background-color: #27ae60;
+      border: none;
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 10px 0;
+      width: 100%;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      user-select: none;
+      box-shadow: 0 3px 6px rgb(0 0 0 / 0.15);
+    }
+    #sendChatBtn:hover:not(:disabled) {
+      background-color: #2ecc71;
+    }
+    #sendChatBtn:disabled {
+      background-color: #95a5a6;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .sidebar #image {
+  width: 100%;
+
+  height: auto;
+  object-fit: cover;
+  margin: 0;               /* Remove any spacing */
+  padding-bottom: 120px;
+  display: block;
+}
+    
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('logo1.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.5; /* Adjust to your preference */
+  z-index: -1;  /* Push behind all content */
+}
+
+
+    /* Info bar */
+    .info-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background-color: #2980b9;
+      color: white;
+      padding: 10px 20px;
+      font-weight: bold;
+      display: none;
+      z-index: 3000;
+      animation: slideDown 0.5s ease forwards;
+      user-select: none;
+    }
+    @keyframes slideDown {
+      from {
+        transform: translateY(-100%);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
+   
+  </style>
+</head>
+<body>
+<div class="sidebar">
+  <img id="image" src="logo1.jpeg" alt="logo.png">
+  
+  <a class="nav-item" href="index.html" title="Work Orders (WO)">
+    <i class="fas fa-tools"></i>
+    <span>WO</span>
+  </a>
+
+  <a class="nav-item" href="assets.html" title="Assets">
+    <i class="fas fa-boxes"></i>
+    <span>Assets</span>
+  </a>
+
+  <a class="nav-item" href="inventory.html" title="Inventory">
+    <i class="fas fa-warehouse"></i>
+    <span>Inventory</span>
+  </a>
+</div>
+
+</div>
+  <h1>Work Orders Calendar</h1>
+  <button id="addOrderBtn">Add Work Order</button>
+  <div id="calendar"></div>
+
+  <div class="modal" id="orderModal">
+    <div class="modal-content">
+      <form id="workOrderForm" autocomplete="off">
+        <div class="form-group">
+          <label for="orderTitle">Title</label>
+          <input type="text" id="orderTitle" name="orderTitle" required />
+        </div>
+        <div class="form-group">
+          <label for="orderDesc">Description</label>
+          <textarea id="orderDesc" name="orderDesc" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="orderDate">Date</label>
+          <input type="date" id="orderDate" name="orderDate" required />
+        </div>
+        <div class="form-group">
+          <label for="orderPart">Part</label>
+          <select id="orderPart" name="orderPart" required>
+            <option value="Engine">Engine</option>
+            <option value="Electrical">Electrical</option>
+            <option value="Hydraulics">Hydraulics</option>
+            <option value="Pneumatics">Pneumatics</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="orderOperator">Operator</label>
+          <select id="orderOperator" name="orderOperator" required>
+    <option value="">Select Operator</option>
+    <option value="John Doe">John Doe</option>
+    <option value="Jane Smith">Jane Smith</option>
+    <option value="Ali Khan">Ali Khan</option>
+    <option value="Maria Garcia">Maria Garcia</option>
+    <option value="Other">Other</option>
+  </select>
+        </div>
+        <div class="form-group">
+          <label for="orderStatus">Status</label>
+          <select id="orderStatus" name="orderStatus" required>
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Done">Done</option>
+          </select>
+        </div>
+        <div class="button-row">
+          <button type="submit" id="saveBtn">Save</button>
+          <button type="button" id="cancelBtn">Cancel</button>
+        </div>
+      </form>
+
+      <!-- Chat Panel (only visible in edit mode) -->
+      <div class="right-panel" id="chatPanel" style="display:none;">
+        <h3>Chat</h3>
+        <div id="chatMessages" aria-live="polite" aria-relevant="additions"></div>
+        <textarea id="chatInput" placeholder="Type your message..." rows="2"></textarea>
+        <button id="sendChatBtn" disabled>Send</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-bar" id="infoBar"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+<script>
+  const currentPage = window.location.pathname.split("/").pop();
+  const navItems = document.querySelectorAll(".nav-item");
+
+  navItems.forEach(item => {
+    const href = item.getAttribute("href");
+    if (href === currentPage) {
+      item.classList.add("active");
+    } else {
+      item.classList.remove("active");
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const calendarEl = document.getElementById('calendar');
+    const modal = document.getElementById('orderModal');
+    const form = document.getElementById('workOrderForm');
+    const chatPanel = document.getElementById('chatPanel');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+    const sendChatBtn = document.getElementById('sendChatBtn');
+    const infoBar = document.getElementById('infoBar');
+
+    const addOrderBtn = document.getElementById('addOrderBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+
+    // Form inputs
+    const inputTitle = document.getElementById('orderTitle');
+    const inputDesc = document.getElementById('orderDesc');
+    const inputDate = document.getElementById('orderDate');
+    const selectPart = document.getElementById('orderPart');
+    const inputOperator = document.getElementById('orderOperator');
+    const selectStatus = document.getElementById('orderStatus');
+
+    // State
+    let calendar;
+    let editingEvent = null; // null if adding new
+    let chatData = {}; // Store chat messages keyed by event id
+    const STORAGE_EVENTS_KEY = 'workOrderEvents';
+    const STORAGE_CHAT_KEY = 'workOrderChatData';
+
+    // Load chat data from localStorage
+    function loadChatData() {
+      const saved = localStorage.getItem(STORAGE_CHAT_KEY);
+      chatData = saved ? JSON.parse(saved) : {};
+    }
+    // Save chat data to localStorage
+    function saveChatData() {
+      localStorage.setItem(STORAGE_CHAT_KEY, JSON.stringify(chatData));
+    }
+
+    // Load events from localStorage
+    function loadEvents() {
+      const saved = localStorage.getItem(STORAGE_EVENTS_KEY);
+      return saved ? JSON.parse(saved) : [];
+    }
+
+    // Save events to localStorage
+    function saveEvents() {
+      const events = calendar.getEvents().map(ev => ({
+        id: ev.id,
+        title: ev.title,
+        start: ev.start.toISOString(),
+        allDay: ev.allDay,
+        extendedProps: ev.extendedProps,
+      }));
+      localStorage.setItem(STORAGE_EVENTS_KEY, JSON.stringify(events));
+    }
+
+    // Show info bar message
+    function showInfo(message) {
+      infoBar.textContent = message;
+      infoBar.style.display = 'block';
+      setTimeout(() => {
+        infoBar.style.display = 'none';
+        infoBar.textContent = '';
+      }, 3000);
+    }
+
+    // Clear chat messages area
+    function clearChatMessages() {
+      chatMessages.innerHTML = '';
+    }
+
+    // Format date string as YYYY-MM-DD for input[type=date]
+    function formatDateForInput(date) {
+      const d = new Date(date);
+      return d.toISOString().slice(0, 10);
+    }
+
+    // Format date & time for chat message timestamp display
+    function formatDateTime(dateString) {
+      const d = new Date(dateString);
+      return d.toLocaleString([], { dateStyle: 'short', timeStyle: 'short' });
+    }
+
+    // Render chat messages in chat panel
+    function renderChatMessages(eventId, operatorName) {
+      clearChatMessages();
+      if (!chatData[eventId]) return;
+
+      chatData[eventId].forEach(msg => {
+        const div = document.createElement('div');
+        div.classList.add('chat-message');
+        // Meta line with sender and timestamp
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+
+        // If sender is 'Operator', show current operatorName; else show sender as is
+        const senderName = (msg.sender === 'Operator') ? operatorName : msg.sender;
+        meta.textContent = `${senderName} • ${formatDateTime(msg.timestamp)}`;
+
+        const content = document.createElement('div');
+        content.textContent = msg.message;
+
+        div.appendChild(meta);
+        div.appendChild(content);
+        chatMessages.appendChild(div);
+      });
+
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Enable or disable send button based on input content
+    function checkChatInput() {
+      sendChatBtn.disabled = chatInput.value.trim() === '';
+    }
+
+    // Add chat message for event
+    function addChatMessage(eventId, sender, message) {
+      if (!chatData[eventId]) chatData[eventId] = [];
+      chatData[eventId].push({
+        sender,
+        message,
+        timestamp: new Date().toISOString(),
+      });
+      saveChatData();
+      renderChatMessages(eventId, inputOperator.value);
+    }
+
+    // Reset form to empty and defaults
+    function resetForm() {
+      form.reset();
+      selectPart.disabled = false;
+      selectPart.style.backgroundColor = '';
+      selectStatus.value = 'Pending';
+      editingEvent = null;
+      chatPanel.style.display = 'none';
+      chatInput.value = '';
+      sendChatBtn.disabled = true;
+    }
+
+    // Open modal - if event passed, editing mode, else adding mode
+    function openModal(event = null) {
+      modal.style.display = 'flex';
+      if (event) {
+        editingEvent = event;
+        // Fill form with event data
+        inputTitle.value = event.title || '';
+        inputDesc.value = event.extendedProps.description || '';
+        inputDate.value = formatDateForInput(event.start);
+        selectPart.value = event.extendedProps.part || 'Other';
+        inputOperator.value = event.extendedProps.operator || '';
+        selectStatus.value = event.extendedProps.status || 'Pending';
+
+        // Part field is disabled & grayed out
+        selectPart.disabled = true;
+        selectPart.style.backgroundColor = '#f0f0f0';
+
+        // Show chat panel
+        chatPanel.style.display = 'flex';
+        renderChatMessages(event.id, inputOperator.value);
+      } else {
+        // Adding new task
+        resetForm();
+        modal.style.display = 'flex';
+        selectPart.disabled = false;
+        selectPart.style.backgroundColor = '';
+        chatPanel.style.display = 'none';
+      }
+      inputTitle.focus();
+    }
+
+    // Close modal
+    function closeModal() {
+      modal.style.display = 'none';
+      editingEvent = null;
+    }
+
+    // Save or update event based on form data
+    function saveEventFromForm() {
+      const title = inputTitle.value.trim();
+      const description = inputDesc.value.trim();
+      const dateStr = inputDate.value;
+      const part = selectPart.value;
+      const operator = inputOperator.value.trim();
+      const status = selectStatus.value;
+
+      if (!title || !description || !dateStr || !part || !operator || !status) {
+        alert('Please fill in all fields.');
+        return false;
+      }
+
+      const date = new Date(dateStr + 'T00:00:00');
+
+      if (editingEvent) {
+        // Update existing event
+        if (status === 'Done') {
+          // Remove event from calendar and chats
+          calendar.getEventById(editingEvent.id).remove();
+          delete chatData[editingEvent.id];
+          saveChatData();
+          saveEvents();
+          showInfo('Work order marked as Done and removed from calendar.');
+        } else {
+          const evt = calendar.getEventById(editingEvent.id);
+          evt.setProp('title', title);
+          evt.setStart(date);
+          evt.setExtendedProp('description', description);
+          evt.setExtendedProp('part', part);
+          evt.setExtendedProp('operator', operator);
+          evt.setExtendedProp('status', status);
+          // Refresh calendar view to reflect any changes
+          calendar.refetchEvents();
+          saveEvents();
+          showInfo('Work order updated successfully.');
+        }
+      } else {
+        // Adding new event, generate unique ID
+        const id = 'id-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+        if (status === 'Done') {
+          showInfo('Cannot add a new work order with status Done.');
+          return false;
+        }
+        calendar.addEvent({
+          id,
+          title,
+          start: date,
+          allDay: true,
+          extendedProps: {
+            description,
+            part,
+            operator,
+            status,
+          }
+        });
+        saveEvents();
+        showInfo('New work order added successfully.');
+      }
+      return true;
+    }
+
+    // Handle operator field changes to update chat sender display dynamically
+    inputOperator.addEventListener('input', () => {
+      if (!editingEvent) return;
+      renderChatMessages(editingEvent.id, inputOperator.value);
+    });
+
+    // Listen for chat input changes to enable/disable send button
+    chatInput.addEventListener('input', checkChatInput);
+
+    // Handle send chat message button click
+    sendChatBtn.addEventListener('click', () => {
+      const message = chatInput.value.trim();
+      if (message === '' || !editingEvent) return;
+      addChatMessage(editingEvent.id, 'Operator', message);
+      chatInput.value = '';
+      checkChatInput();
+    });
+
+    // Handle form submission
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      if (saveEventFromForm()) {
+        closeModal();
+      }
+    });
+
+    // Cancel button closes modal
+    cancelBtn.addEventListener('click', () => {
+      closeModal();
+    });
+
+    // Clicking outside modal content closes modal
+    modal.addEventListener('click', e => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    // Add Work Order button opens empty form modal
+    addOrderBtn.addEventListener('click', () => openModal());
+
+    // Initialize calendar
+    calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      selectable: true,
+      height: 'auto',
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+      },
+      events: loadEvents(),
+      eventClick(info) {
+        openModal(info.event);
+      },
+    });
+
+    loadChatData();
+    calendar.render();
+  });
+</script>
+
+</body>
+</html>

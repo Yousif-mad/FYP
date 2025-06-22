@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inventory</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+  <div class="sidebar">
+  <img id="image" src="logo1.jpeg" alt="logo.png">
+  
+  <a class="nav-item" href="index.html" title="Work Orders (WO)">
+    <i class="fas fa-tools"></i>
+    <span>WO</span>
+  </a>
+
+  <a class="nav-item" href="assets.html" title="Assets">
+    <i class="fas fa-boxes"></i>
+    <span>Assets</span>
+  </a>
+
+  <a class="nav-item" href="inventory.html" title="Inventory">
+    <i class="fas fa-warehouse"></i>
+    <span>Inventory</span>
+  </a>
+</div>
+
+  
+  <script>
+  const currentPage = window.location.pathname.split("/").pop();
+  const navItems = document.querySelectorAll(".nav-item");
+
+  navItems.forEach(item => {
+    const href = item.getAttribute("href");
+    if (href === currentPage) {
+      item.classList.add("active");
+    } else {
+      item.classList.remove("active");
+    }
+  });
+</script>
+
+</body>
+</html>
