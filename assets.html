@@ -215,11 +215,59 @@
   font-size: 14px;
 }
 
+/* === DARK MODE STYLES === */
+body.dark-mode {
+  background-color: #121212;
+  color: #f0f0f0;
+}
+body.dark-mode #stationList,
+body.dark-mode #stationTableContainer,
+body.dark-mode .modal-content,
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select,
+body.dark-mode .asset-group,
+body.dark-mode .subAsset-group {
+  background-color: #1f1f1f;
+  color: #f0f0f0;
+  border-color: #444;
+}
+body.dark-mode th,
+body.dark-mode td {
+  background-color: #2a2a2a;
+  color: #f0f0f0;
+}
+body.dark-mode #addStationBtn,
+body.dark-mode button {
+  background-color: #3a9bdc;
+  color: white;
+  border: none;
+}
+body.dark-mode .nav-item {
+  background-color: transparent;
+  color: #ccc;
+}
+body.dark-mode .nav-item.active,
+body.dark-mode .nav-item:hover {
+  background-color: #3a9bdc;
+  color: white;
+}
+body.dark-mode .modal {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+
   </style>
 </head>
 <body>
 
   <h1>Stations Management</h1>
+  <button id="darkModeToggle" style="position: fixed; top: 20px; right: 20px; z-index: 999; background: #f0f0f0; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+  <i class="fas fa-sun"></i>
+</button>
+
+  
+
   <div class="sidebar">
     <img id="image" src="logo1.jpeg" alt="logo.png">
 
@@ -269,6 +317,36 @@
   </div>
 
 <script>
+  // 🌗 Dark Mode Toggle Logic
+const darkToggle = document.getElementById('darkModeToggle');
+const darkIcon = darkToggle.querySelector('i');
+
+function updateDarkModeButton() {
+  if (document.body.classList.contains('dark-mode')) {
+    darkIcon.className = 'fas fa-moon';
+    darkToggle.style.background = '#333';
+    darkIcon.style.color = '#f0f0f0';
+    darkToggle.title = "Switch to Light Mode";
+  } else {
+    darkIcon.className = 'fas fa-sun';
+    darkToggle.style.background = '#f0f0f0';
+    darkIcon.style.color = '#000';
+    darkToggle.title = "Switch to Dark Mode";
+  }
+}
+
+darkToggle.addEventListener('click', () => {
+  document.body.classList.toggle('dark-mode');
+  localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+  updateDarkModeButton();
+});
+
+if (localStorage.getItem('darkMode') === 'true') {
+  document.body.classList.add('dark-mode');
+}
+updateDarkModeButton();
+
+
   let stations = JSON.parse(localStorage.getItem("stationsData")) || [];
   let editIndex = null;
   let selectedStationIndex = null;
@@ -437,21 +515,44 @@
     function safeGet(field) {
       return item && typeof item === "object" && item[field] ? item[field] : "";
     }
+    function updateItemField(field, value) {
+  if (type === "part") {
+    // For parts (string), only description might exist? We'll treat all fields as description only
+    // If you want, you can create a structure for parts with objects instead of strings
+    // For now, ignore saving for parts or skip
+    return;
+  }
+  if (!item) return;
+  item[field] = value;
+  saveStations();
+}
 
     // Description cell
-    const tdDesc = document.createElement("td");
-    tdDesc.textContent = safeGet("description");
-    tr.appendChild(tdDesc);
+   const tdDesc = document.createElement("td");
+tdDesc.contentEditable = true;
+tdDesc.textContent = safeGet("description");
+tdDesc.addEventListener("blur", () => {
+  updateItemField("description", tdDesc.textContent.trim());
+});
+tr.appendChild(tdDesc);
 
-    // Status cell
-    const tdStatus = document.createElement("td");
-    tdStatus.textContent = safeGet("status");
-    tr.appendChild(tdStatus);
+// Status cell (editable)
+const tdStatus = document.createElement("td");
+tdStatus.contentEditable = true;
+tdStatus.textContent = safeGet("status");
+tdStatus.addEventListener("blur", () => {
+  updateItemField("status", tdStatus.textContent.trim());
+});
+tr.appendChild(tdStatus);
 
-    // Date cell
-    const tdDate = document.createElement("td");
-    tdDate.textContent = safeGet("date");
-    tr.appendChild(tdDate);
+// Date cell (editable)
+const tdDate = document.createElement("td");
+tdDate.contentEditable = true;
+tdDate.textContent = safeGet("date");
+tdDate.addEventListener("blur", () => {
+  updateItemField("date", tdDate.textContent.trim());
+});
+tr.appendChild(tdDate);
 
     tbody.appendChild(tr);
 

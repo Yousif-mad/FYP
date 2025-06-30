@@ -6,66 +6,71 @@
   <title>Maintenance Work Orders Calendar</title>
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
   <link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-/>
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
   <style>
     .sidebar {
-    
-    position: fixed;
-    left: 0;
-    top: 0;
-    height: 100vh;
-    width: 100px;
-    background-color: #2f3e4e;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0;
-    box-shadow: 2px 0 8px rgba(0,0,0,0.15);
-  }
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100vh;
+      width: 100px;
+      background-color: #2f3e4e;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+    }
+    .sidebar #image {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      margin: 0;
+      padding-bottom: 120px;
+      display: block;
+    }
+    /* Nav items container */
+    .nav-item {
+      color: #a9b3c1;
+      text-align: center;
+      margin: 20px 0;
+      cursor: pointer;
+      width: 70px;
+      transition: color 0.3s ease, background-color 0.3s ease;
+      border-radius: 12px;
+      padding: 10px 0;
+    }
 
-  /* Nav items container */
-  .nav-item {
-    color: #a9b3c1;
-    text-align: center;
-    margin: 20px 0;
-    cursor: pointer;
-    width: 70px;
-    transition: color 0.3s ease, background-color 0.3s ease;
-    border-radius: 12px;
-    padding: 10px 0;
-  }
+    /* Icon style */
+    .nav-item i {
+      font-size: 28px;
+      display: block;
+      margin-bottom: 8px;
+    }
 
-  /* Icon style */
-  .nav-item i {
-    font-size: 28px;
-    display: block;
-    margin-bottom: 8px;
-  }
+    /* Text below icon */
+    .nav-item span {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
 
-  /* Text below icon */
-  .nav-item span {
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-  }
+    /* Hover effect */
+    .nav-item:hover {
+      color: #ffffff;
+      background-color: #1e90ff;
+      box-shadow: 0 4px 12px rgba(30,144,255,0.6);
+    }
 
-  /* Hover effect */
-  .nav-item:hover {
-    color: #ffffff;
-    background-color: #1e90ff;
-    box-shadow: 0 4px 12px rgba(30,144,255,0.6);
-  }
-
-  /* Active state */
-  .nav-item.active {
-    color: #ffffff;
-    background-color: #007acc;
-    box-shadow: 0 4px 15px rgba(0,122,204,0.8);
-  }
+    /* Active state */
+    .nav-item.active {
+      color: #ffffff;
+      background-color: #007acc;
+      box-shadow: 0 4px 15px rgba(0,122,204,0.8);
+    }
     body {
-    
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 20px;
       background: #f9fafb;
@@ -98,6 +103,13 @@
       background-color: #3498db !important;
       color: white !important;
       box-shadow: 0 0 8px #2980b9;
+    }
+    /* Urgent event styling */
+    .fc-event.urgent-event {
+      background-color: #e74c3c !important;
+      border-color: #c0392b !important;
+      color: white !important;
+      box-shadow: 0 0 10px #c0392b !important;
     }
     button#addOrderBtn {
       display: block;
@@ -222,6 +234,19 @@
       color: #34495e;
     }
 
+    /* Urgent checkbox container */
+    .form-group.urgent-group {
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+    }
+    .form-group.urgent-group label {
+      margin: 0;
+      font-weight: 600;
+      user-select: text;
+      color: #e74c3c;
+    }
+
     /* Right panel - Chat */
     .right-panel {
       flex: 1;
@@ -305,31 +330,22 @@
       cursor: not-allowed;
       box-shadow: none;
     }
-    .sidebar #image {
-  width: 100%;
-
-  height: auto;
-  object-fit: cover;
-  margin: 0;               /* Remove any spacing */
-  padding-bottom: 120px;
-  display: block;
-}
     
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('logo1.jpeg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  opacity: 0.5; /* Adjust to your preference */
-  z-index: -1;  /* Push behind all content */
-}
-
+    
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('logo1.jpeg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0.5; /* Adjust to your preference */
+      z-index: -1;  /* Push behind all content */
+    }
 
     /* Info bar */
     .info-bar {
@@ -354,32 +370,187 @@ body::before {
         transform: translateY(0);
       }
     }
-   
+
+    /* Alert bar styling */
+    .alert-bar {
+      position: fixed;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #e74c3c;
+      color: white;
+      padding: 15px 25px;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(231, 76, 60, 0.8);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 3100;
+      user-select: none;
+    }
+    .alert-bar i {
+      font-size: 24px;
+    }
+    #darkModeToggle {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  background-color: #ffffff;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  font-size: 20px;
+  color: #f39c12;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 4000;
+}
+
+#darkModeToggle:hover {
+  background-color: #e0f7fa;
+  transform: scale(1.1);
+}
+
+body.dark-mode #darkModeToggle {
+  background-color: #2c3e50;
+  color: #ecf0f1;
+}
+
+body.dark-mode #darkModeToggle:hover {
+  background-color: #34495e;
+}
+
+#darkModeToggle:active {
+  transform: scale(0.95);
+}
+/* Overall background and text */
+body.dark-mode {
+  background-color: #121212;
+  color: #f0f0f0;
+}
+
+/* Calendar container */
+body.dark-mode #calendar {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+}
+
+/* Modal + Form */
+body.dark-mode .modal-content,
+body.dark-mode #workOrderForm {
+  background-color: #222;
+  color: #eee;
+}
+
+/* Inputs and Textareas */
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+  background-color: #2c2c2c;
+  color: #eee;
+  border: 1.5px solid #555;
+}
+
+/* Sidebar */
+body.dark-mode .sidebar {
+  background-color: #1a1a1a;
+}
+
+/* Nav Items */
+body.dark-mode .nav-item {
+  color: #ccc;
+}
+body.dark-mode .nav-item:hover,
+body.dark-mode .nav-item.active {
+  background-color: #3a9bdc;
+  color: #fff;
+}
+
+/* Buttons */
+body.dark-mode button {
+  background-color: #2980b9;
+  color: white;
+}
+body.dark-mode button:hover {
+  background-color: #3498db;
+}
+
+/* Alert Bar */
+body.dark-mode .alert-bar {
+  background-color: #c0392b;
+}
+
+/* Chat Panel */
+body.dark-mode .right-panel {
+  background-color: #1f1f1f;
+}
+body.dark-mode .chat-message {
+  background-color: #2c2c2c;
+  color: #f0f0f0;
+}
+
+
   </style>
 </head>
 <body>
-<div class="sidebar">
-  <img id="image" src="logo1.jpeg" alt="logo.png">
-  
-  <a class="nav-item" href="index.html" title="Work Orders (WO)">
-    <i class="fas fa-tools"></i>
-    <span>WO</span>
-  </a>
+  <div class="sidebar">
+    <img id="image" src="logo1.jpeg" alt="logo.png">
+    
+    <a class="nav-item" href="index.html" title="Work Orders (WO)">
+      <i class="fas fa-tools"></i>
+      <span>WO</span>
+    </a>
 
-  <a class="nav-item" href="assets.html" title="Assets">
-    <i class="fas fa-boxes"></i>
-    <span>Assets</span>
-  </a>
+    <a class="nav-item" href="assets.html" title="Assets">
+      <i class="fas fa-boxes"></i>
+      <span>Assets</span>
+    </a>
 
-  <a class="nav-item" href="inventory.html" title="Inventory">
-    <i class="fas fa-warehouse"></i>
-    <span>Inventory</span>
-  </a>
-</div>
+    <a class="nav-item" href="inventory.html" title="Inventory">
+      <i class="fas fa-warehouse"></i>
+      <span>Inventory</span>
+    </a>
+  </div>
 
-</div>
   <h1>Work Orders Calendar</h1>
-  <button id="addOrderBtn">Add Work Order</button>
+  <button id="darkModeToggle" title="Toggle Dark Mode" aria-label="Toggle Dark Mode">
+  <i class="fas fa-sun"></i>
+</button>
+
+
+  <!-- Filters container -->
+  <div style="max-width: 900px; margin: 0 auto 15px auto; display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; user-select:none;">
+    <!-- Status filter -->
+    <div>
+      <label for="statusFilter"><strong>Status Filter:</strong></label><br />
+      <select id="statusFilter" style="padding: 5px; border-radius: 5px; border: 1.5px solid #ccc; font-size: 1rem;">
+        <option value="All">All</option>
+        <option value="Pending">Pending</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Done">Done</option>
+      </select>
+    </div>
+
+    <!-- Station filter -->
+    <div>
+      <label for="stationFilter"><strong>Station Filter:</strong></label><br />
+      <select id="stationFilter" style="padding: 5px; border-radius: 5px; border: 1.5px solid #ccc; font-size: 1rem;">
+        <option value="All">All</option>
+        <option value="Engine">Engine</option>
+        <option value="Electrical">Electrical</option>
+        <option value="Hydraulics">Hydraulics</option>
+        <option value="Pneumatics">Pneumatics</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="buttonContainer" style="max-width: 900px; margin: 0 auto 25px auto; display: flex; flex-direction: column; align-items: center; gap: 12px;">
+  <button id="addOrderBtn" style="width: 200px;">Add Work Order</button>
+  <button id="clearCalendarBtn" style="width: 200px; background-color:#c0392b; color:white; border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 3px 6px rgb(0 0 0 / 0.2); user-select:none;">Clear Calendar</button>
+</div>
   <div id="calendar"></div>
 
   <div class="modal" id="orderModal">
@@ -410,13 +581,13 @@ body::before {
         <div class="form-group">
           <label for="orderOperator">Operator</label>
           <select id="orderOperator" name="orderOperator" required>
-    <option value="">Select Operator</option>
-    <option value="John Doe">John Doe</option>
-    <option value="Jane Smith">Jane Smith</option>
-    <option value="Ali Khan">Ali Khan</option>
-    <option value="Maria Garcia">Maria Garcia</option>
-    <option value="Other">Other</option>
-  </select>
+            <option value="">Select Operator</option>
+            <option value="John Doe">John Doe</option>
+            <option value="Jane Smith">Jane Smith</option>
+            <option value="Ali Khan">Ali Khan</option>
+            <option value="Maria Garcia">Maria Garcia</option>
+            <option value="Other">Other</option>
+          </select>
         </div>
         <div class="form-group">
           <label for="orderStatus">Status</label>
@@ -426,9 +597,17 @@ body::before {
             <option value="Done">Done</option>
           </select>
         </div>
+
+        <!-- Urgent checkbox - *** Added -->
+        <div class="form-group urgent-group">
+          <input type="checkbox" id="orderUrgent" name="orderUrgent" />
+          <label for="orderUrgent">Mark as Urgent</label>
+        </div>
+
         <div class="button-row">
           <button type="submit" id="saveBtn">Save</button>
           <button type="button" id="cancelBtn">Cancel</button>
+          <button type="button" id="deleteBtn" style="background-color:#e74c3c; color:white; display:none;">Delete</button>
         </div>
       </form>
 
@@ -436,328 +615,438 @@ body::before {
       <div class="right-panel" id="chatPanel" style="display:none;">
         <h3>Chat</h3>
         <div id="chatMessages" aria-live="polite" aria-relevant="additions"></div>
-        <textarea id="chatInput" placeholder="Type your message..." rows="2"></textarea>
+        <textarea id="chatInput" placeholder="Type message..." rows="2"></textarea>
         <button id="sendChatBtn" disabled>Send</button>
       </div>
     </div>
   </div>
 
-  <div class="info-bar" id="infoBar"></div>
+  <!-- Alert bar -->
+  <div id="alertBar" class="alert-bar" style="display:none;">
+    <i class="fas fa-exclamation-triangle"></i>
+    <span id="alertText"></span>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
-<script>
-  const currentPage = window.location.pathname.split("/").pop();
-  const navItems = document.querySelectorAll(".nav-item");
+  <script>
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+     let workOrders = JSON.parse(localStorage.getItem('workOrders')) || [];
+    const recurringTasks = [
+  {
+    id: 'recurring-1',
+    title: 'Recurring check at Station A',
+    station: 'Station A',
+    intervalSeconds: 10800,
+    status: 'pending',
+    lastAdded: 0, // timestamp to track last addition
+  },
+  // Add more recurring tasks here if needed
+];
+const RECURRING_INTERVAL_MS = 3 * 60 * 60 * 1000; // 3 hours
+function loadRecurringLastAdded() {
+  const saved = localStorage.getItem('recurringLastAdded');
+  if (saved) {
+    const parsed = JSON.parse(saved);
+    recurringTasks.forEach(task => {
+      if (parsed[task.id]) {
+        task.lastAdded = parsed[task.id];
+      }
+    });
+  }
+}
 
-  navItems.forEach(item => {
-    const href = item.getAttribute("href");
-    if (href === currentPage) {
-      item.classList.add("active");
-    } else {
-      item.classList.remove("active");
+// Save lastAdded times to localStorage
+function saveRecurringLastAdded() {
+  const data = {};
+  recurringTasks.forEach(task => {
+    data[task.id] = task.lastAdded || 0;
+  });
+  localStorage.setItem('recurringLastAdded', JSON.stringify(data));
+}
+function addRecurringTasks() {
+  const now = Date.now();
+
+  recurringTasks.forEach(recTask => {
+    if (!recTask.lastAdded || now - recTask.lastAdded >= RECURRING_INTERVAL_MS) {
+      const newTask = {
+        id: recTask.id + '-' + now,
+        title: recTask.title,
+        desc: 'Auto-generated recurring task',
+        date: new Date().toISOString(),
+        part: recTask.station || 'Other',
+        operator: 'System',
+        status: 'Pending',
+        urgent: false,
+        createdAt: now,
+        recurring: true,
+      };
+
+      tasks.push(newTask);
+      workOrders.push(newTask);
+
+      recTask.lastAdded = now;
+
+      saveRecurringLastAdded();
+
+      localStorage.setItem('workOrders', JSON.stringify(workOrders));
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+
+      showAlert(`🔁 New recurring task added: "${newTask.title}"`);
     }
   });
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const calendarEl = document.getElementById('calendar');
-    const modal = document.getElementById('orderModal');
-    const form = document.getElementById('workOrderForm');
-    const chatPanel = document.getElementById('chatPanel');
-    const chatMessages = document.getElementById('chatMessages');
-    const chatInput = document.getElementById('chatInput');
-    const sendChatBtn = document.getElementById('sendChatBtn');
-    const infoBar = document.getElementById('infoBar');
+  renderCalendar();
+}
 
-    const addOrderBtn = document.getElementById('addOrderBtn');
-    const cancelBtn = document.getElementById('cancelBtn');
 
-    // Form inputs
-    const inputTitle = document.getElementById('orderTitle');
-    const inputDesc = document.getElementById('orderDesc');
-    const inputDate = document.getElementById('orderDate');
-    const selectPart = document.getElementById('orderPart');
-    const inputOperator = document.getElementById('orderOperator');
-    const selectStatus = document.getElementById('orderStatus');
 
-    // State
-    let calendar;
-    let editingEvent = null; // null if adding new
-    let chatData = {}; // Store chat messages keyed by event id
-    const STORAGE_EVENTS_KEY = 'workOrderEvents';
-    const STORAGE_CHAT_KEY = 'workOrderChatData';
 
-    // Load chat data from localStorage
-    function loadChatData() {
-      const saved = localStorage.getItem(STORAGE_CHAT_KEY);
-      chatData = saved ? JSON.parse(saved) : {};
-    }
-    // Save chat data to localStorage
-    function saveChatData() {
-      localStorage.setItem(STORAGE_CHAT_KEY, JSON.stringify(chatData));
-    }
+    const darkToggle = document.getElementById('darkModeToggle');
+const darkIcon = darkToggle.querySelector('i');
 
-    // Load events from localStorage
-    function loadEvents() {
-      const saved = localStorage.getItem(STORAGE_EVENTS_KEY);
-      return saved ? JSON.parse(saved) : [];
-    }
+function updateDarkModeButton() {
+  if (document.body.classList.contains('dark-mode')) {
+    darkIcon.className = 'fas fa-moon';
+    darkToggle.title = "Switch to Light Mode";
+  } else {
+    darkIcon.className = 'fas fa-sun';
+    darkToggle.title = "Switch to Dark Mode";
+  }
+}
 
-    // Save events to localStorage
-    function saveEvents() {
-      const events = calendar.getEvents().map(ev => ({
-        id: ev.id,
-        title: ev.title,
-        start: ev.start.toISOString(),
-        allDay: ev.allDay,
-        extendedProps: ev.extendedProps,
-      }));
-      localStorage.setItem(STORAGE_EVENTS_KEY, JSON.stringify(events));
-    }
+darkToggle.addEventListener('click', () => {
+  document.body.classList.toggle('dark-mode');
+  localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+  updateDarkModeButton();
+});
 
-    // Show info bar message
-    function showInfo(message) {
-      infoBar.textContent = message;
-      infoBar.style.display = 'block';
-      setTimeout(() => {
-        infoBar.style.display = 'none';
-        infoBar.textContent = '';
-      }, 3000);
-    }
+// Load saved preference
+if (localStorage.getItem('darkMode') === 'true') {
+  document.body.classList.add('dark-mode');
+}
+updateDarkModeButton();
 
-    // Clear chat messages area
-    function clearChatMessages() {
-      chatMessages.innerHTML = '';
-    }
 
-    // Format date string as YYYY-MM-DD for input[type=date]
-    function formatDateForInput(date) {
-      const d = new Date(date);
-      return d.toISOString().slice(0, 10);
-    }
+    document.addEventListener('DOMContentLoaded', function () {
+      const calendarEl = document.getElementById('calendar');
+      const addOrderBtn = document.getElementById('addOrderBtn');
+      const modal = document.getElementById('orderModal');
+      const form = document.getElementById('workOrderForm');
+      const cancelBtn = document.getElementById('cancelBtn');
+      const chatPanel = document.getElementById('chatPanel');
+      const chatMessages = document.getElementById('chatMessages');
+      const chatInput = document.getElementById('chatInput');
+      const sendChatBtn = document.getElementById('sendChatBtn');
+      const statusFilter = document.getElementById('statusFilter');
+      const stationFilter = document.getElementById('stationFilter');
+      const alertBar = document.getElementById('alertBar');
+      const alertText = document.getElementById('alertText');
+      const deleteBtn = document.getElementById('deleteBtn');
+const clearCalendarBtn = document.getElementById('clearCalendarBtn');
 
-    // Format date & time for chat message timestamp display
-    function formatDateTime(dateString) {
-      const d = new Date(dateString);
-      return d.toLocaleString([], { dateStyle: 'short', timeStyle: 'short' });
-    }
+deleteBtn.addEventListener('click', () => {
+  if (!currentEvent) return;
 
-    // Render chat messages in chat panel
-    function renderChatMessages(eventId, operatorName) {
-      clearChatMessages();
-      if (!chatData[eventId]) return;
-
-      chatData[eventId].forEach(msg => {
-        const div = document.createElement('div');
-        div.classList.add('chat-message');
-        // Meta line with sender and timestamp
-        const meta = document.createElement('div');
-        meta.className = 'meta';
-
-        // If sender is 'Operator', show current operatorName; else show sender as is
-        const senderName = (msg.sender === 'Operator') ? operatorName : msg.sender;
-        meta.textContent = `${senderName} • ${formatDateTime(msg.timestamp)}`;
-
-        const content = document.createElement('div');
-        content.textContent = msg.message;
-
-        div.appendChild(meta);
-        div.appendChild(content);
-        chatMessages.appendChild(div);
-      });
-
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    // Enable or disable send button based on input content
-    function checkChatInput() {
-      sendChatBtn.disabled = chatInput.value.trim() === '';
-    }
-
-    // Add chat message for event
-    function addChatMessage(eventId, sender, message) {
-      if (!chatData[eventId]) chatData[eventId] = [];
-      chatData[eventId].push({
-        sender,
-        message,
-        timestamp: new Date().toISOString(),
-      });
+  // Confirm delete
+  if (confirm(`Are you sure you want to DELETE the work order "${currentEvent.title}"?`)) {
+    // Remove from workOrders array
+    const index = workOrders.findIndex(w => w.id === currentEvent.id);
+    if (index !== -1) {
+      workOrders.splice(index, 1);
+      // Also remove chat data for this task
+      delete chatData[currentEvent.id];
       saveChatData();
-      renderChatMessages(eventId, inputOperator.value);
-    }
+      saveWorkOrders();
 
-    // Reset form to empty and defaults
-    function resetForm() {
-      form.reset();
-      selectPart.disabled = false;
-      selectPart.style.backgroundColor = '';
-      selectStatus.value = 'Pending';
-      editingEvent = null;
-      chatPanel.style.display = 'none';
-      chatInput.value = '';
-      sendChatBtn.disabled = true;
-    }
-
-    // Open modal - if event passed, editing mode, else adding mode
-    function openModal(event = null) {
-      modal.style.display = 'flex';
-      if (event) {
-        editingEvent = event;
-        // Fill form with event data
-        inputTitle.value = event.title || '';
-        inputDesc.value = event.extendedProps.description || '';
-        inputDate.value = formatDateForInput(event.start);
-        selectPart.value = event.extendedProps.part || 'Other';
-        inputOperator.value = event.extendedProps.operator || '';
-        selectStatus.value = event.extendedProps.status || 'Pending';
-
-        // Part field is disabled & grayed out
-        selectPart.disabled = true;
-        selectPart.style.backgroundColor = '#f0f0f0';
-
-        // Show chat panel
-        chatPanel.style.display = 'flex';
-        renderChatMessages(event.id, inputOperator.value);
-      } else {
-        // Adding new task
-        resetForm();
-        modal.style.display = 'flex';
-        selectPart.disabled = false;
-        selectPart.style.backgroundColor = '';
-        chatPanel.style.display = 'none';
-      }
-      inputTitle.focus();
-    }
-
-    // Close modal
-    function closeModal() {
+      showAlert(`🗑️ Work Order "${currentEvent.title}" deleted.`);
       modal.style.display = 'none';
-      editingEvent = null;
+      renderCalendar();
     }
+  }
+});
 
-    // Save or update event based on form data
-    function saveEventFromForm() {
-      const title = inputTitle.value.trim();
-      const description = inputDesc.value.trim();
-      const dateStr = inputDate.value;
-      const part = selectPart.value;
-      const operator = inputOperator.value.trim();
-      const status = selectStatus.value;
+// Show/hide delete button depending on if editing existing task
+function updateDeleteButtonVisibility() {
+  if (currentEvent) {
+    deleteBtn.style.display = 'inline-block';
+  } else {
+    deleteBtn.style.display = 'none';
+  }
+}
 
-      if (!title || !description || !dateStr || !part || !operator || !status) {
-        alert('Please fill in all fields.');
-        return false;
+// Update delete button visibility on opening modal
+addOrderBtn.addEventListener('click', () => {
+  currentEvent = null;
+  clearForm();
+  chatPanel.style.display = 'none';
+  updateDeleteButtonVisibility();
+  modal.style.display = 'flex';
+});
+
+calendarEl.addEventListener('click', (e) => {
+  // This is handled by FullCalendar eventClick - just update delete button in fillForm
+});
+
+function fillForm(wo) {
+  form.orderTitle.value = wo.title;
+  form.orderDesc.value = wo.desc;
+  form.orderDate.value = wo.date;
+  form.orderPart.value = wo.part;
+  form.orderOperator.value = wo.operator;
+  form.orderStatus.value = wo.status;
+  form.orderUrgent.checked = wo.urgent || false;
+  updateDeleteButtonVisibility();
+}
+
+// Clear Calendar button functionality
+clearCalendarBtn.addEventListener('click', () => {
+  if (confirm('Are you sure you want to CLEAR ALL work orders? This action cannot be undone.')) {
+    workOrders.length = 0; // clear array
+    tasks.length = 0; // also clear recurring tasks (if you want)
+    chatData = {};
+    saveWorkOrders();
+    saveChatData();
+    renderCalendar();
+    showAlert('🗑️ All work orders cleared.');
+  }
+});
+
+
+      let calendar;
+      let currentEvent = null;
+     
+      let chatData = JSON.parse(localStorage.getItem('chatData')) || {};
+      
+      // Show alert bar
+      function showAlert(message) {
+        alertText.textContent = message;
+        alertBar.style.display = 'flex';
+        setTimeout(() => {
+          alertBar.style.display = 'none';
+        }, 15000);
       }
 
-      const date = new Date(dateStr + 'T00:00:00');
+      // Format time difference in human readable form
+      function formatTimeDifference(diffMs) {
+        const minutes = Math.floor(diffMs / (1000 * 60));
+        if (minutes < 1) return 'less than a minute';
+        if (minutes < 60) return `${minutes} minute(s)`;
+        const hours = Math.floor(minutes / 60);
+        if (hours < 24) return `${hours} hour(s)`;
+        const days = Math.floor(hours / 24);
+        return `${days} day(s)`;
+      }
 
-      if (editingEvent) {
-        // Update existing event
-        if (status === 'Done') {
-          // Remove event from calendar and chats
-          calendar.getEventById(editingEvent.id).remove();
-          delete chatData[editingEvent.id];
-          saveChatData();
-          saveEvents();
-          showInfo('Work order marked as Done and removed from calendar.');
-        } else {
-          const evt = calendar.getEventById(editingEvent.id);
-          evt.setProp('title', title);
-          evt.setStart(date);
-          evt.setExtendedProp('description', description);
-          evt.setExtendedProp('part', part);
-          evt.setExtendedProp('operator', operator);
-          evt.setExtendedProp('status', status);
-          // Refresh calendar view to reflect any changes
-          calendar.refetchEvents();
-          saveEvents();
-          showInfo('Work order updated successfully.');
+      // Check for alerts on all work orders
+      function checkAlerts() {
+  const now = new Date();
+  let alerted = false;
+  for (const wo of workOrders) {
+    if (wo.status === 'Done') continue; // ✅ Skip done tasks
+
+    const dueDate = new Date(wo.date);
+    const diff = dueDate - now;
+
+    if (diff < 0) {
+      showAlert(`⚠️ Work Order "${wo.title}" is PAST DUE since ${formatTimeDifference(-diff)} ago!`);
+      alerted = true;
+      break;
+    } else if (diff <= 2 * 60 * 60 * 1000) {
+      showAlert(`⏳ Work Order "${wo.title}" is due in ${formatTimeDifference(diff)}.`);
+      alerted = true;
+      break;
+    }
+  }
+  if (!alerted) {
+    alertBar.style.display = 'none';
+  }
+}
+
+
+      // Run alerts on interval every 2 hours (7200000ms)
+      setInterval(checkAlerts, 7200000);
+      // Run on startup
+      checkAlerts();
+
+      function saveWorkOrders() {
+        localStorage.setItem('workOrders', JSON.stringify(workOrders));
+      }
+
+      function saveChatData() {
+        localStorage.setItem('chatData', JSON.stringify(chatData));
+      }
+
+      // Filter work orders by status and station
+      function filterWorkOrders() {
+        const status = statusFilter.value;
+        const station = stationFilter.value;
+
+        return workOrders.filter(wo => {
+          const statusMatch = status === 'All' || wo.status === status;
+          const stationMatch = station === 'All' || wo.part === station;
+          return statusMatch && stationMatch;
+        });
+      }
+
+      function renderCalendar() {
+        if (calendar) {
+          calendar.destroy();
         }
-      } else {
-        // Adding new event, generate unique ID
-        const id = 'id-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
-        if (status === 'Done') {
-          showInfo('Cannot add a new work order with status Done.');
-          return false;
-        }
-        calendar.addEvent({
-          id,
-          title,
-          start: date,
-          allDay: true,
-          extendedProps: {
-            description,
-            part,
-            operator,
-            status,
+
+        calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          height: 'auto',
+          events: filterWorkOrders().map(wo => ({
+            id: wo.id,
+            title: wo.title,
+            start: wo.date,
+            extendedProps: {
+              desc: wo.desc,
+              part: wo.part,
+              operator: wo.operator,
+              status: wo.status,
+              urgent: wo.urgent || false,
+            },
+            classNames: wo.urgent ? ['urgent-event'] : [],
+          })),
+          eventClick: function(info) {
+            const wo = workOrders.find(w => w.id === info.event.id);
+            if (!wo) return;
+
+            currentEvent = wo;
+            fillForm(wo);
+            chatPanel.style.display = 'flex';
+            loadChat(wo.id);
+            modal.style.display = 'flex';
           }
         });
-        saveEvents();
-        showInfo('New work order added successfully.');
+
+        calendar.render();
       }
-      return true;
-    }
 
-    // Handle operator field changes to update chat sender display dynamically
-    inputOperator.addEventListener('input', () => {
-      if (!editingEvent) return;
-      renderChatMessages(editingEvent.id, inputOperator.value);
-    });
-
-    // Listen for chat input changes to enable/disable send button
-    chatInput.addEventListener('input', checkChatInput);
-
-    // Handle send chat message button click
-    sendChatBtn.addEventListener('click', () => {
-      const message = chatInput.value.trim();
-      if (message === '' || !editingEvent) return;
-      addChatMessage(editingEvent.id, 'Operator', message);
-      chatInput.value = '';
-      checkChatInput();
-    });
-
-    // Handle form submission
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      if (saveEventFromForm()) {
-        closeModal();
+      function fillForm(wo) {
+        form.orderTitle.value = wo.title;
+        form.orderDesc.value = wo.desc;
+        form.orderDate.value = wo.date;
+        form.orderPart.value = wo.part;
+        form.orderOperator.value = wo.operator;
+        form.orderStatus.value = wo.status;
+        form.orderUrgent.checked = wo.urgent || false; // *** Added
       }
-    });
 
-    // Cancel button closes modal
-    cancelBtn.addEventListener('click', () => {
-      closeModal();
-    });
-
-    // Clicking outside modal content closes modal
-    modal.addEventListener('click', e => {
-      if (e.target === modal) {
-        closeModal();
+      function clearForm() {
+        form.reset();
+        form.orderUrgent.checked = false; // *** Added
       }
+
+      function loadChat(orderId) {
+        chatMessages.innerHTML = '';
+        if (chatData[orderId]) {
+          chatData[orderId].forEach(msg => {
+            addChatMessage(msg.sender, msg.text, msg.timestamp);
+          });
+        }
+      }
+
+      function addChatMessage(sender, text, timestamp) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'chat-message';
+        msgDiv.innerHTML = `<div class="meta">${sender} - ${new Date(timestamp).toLocaleString()}</div>${text}`;
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      // Enable send button only if text entered
+      chatInput.addEventListener('input', () => {
+        sendChatBtn.disabled = chatInput.value.trim().length === 0;
+      });
+
+      sendChatBtn.addEventListener('click', () => {
+        if (!currentEvent) return;
+
+        const msgText = chatInput.value.trim();
+        if (!msgText) return;
+
+        if (!chatData[currentEvent.id]) {
+          chatData[currentEvent.id] = [];
+        }
+        const newMsg = {
+          sender: 'User',
+          text: msgText,
+          timestamp: new Date().toISOString(),
+        };
+        chatData[currentEvent.id].push(newMsg);
+        saveChatData();
+        addChatMessage(newMsg.sender, newMsg.text, newMsg.timestamp);
+        chatInput.value = '';
+        sendChatBtn.disabled = true;
+      });
+
+      addOrderBtn.addEventListener('click', () => {
+        currentEvent = null;
+        clearForm();
+        chatPanel.style.display = 'none';
+        modal.style.display = 'flex';
+      });
+
+      cancelBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+      });
+
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+
+        const newOrder = {
+          id: currentEvent ? currentEvent.id : `wo_${Date.now()}`,
+          title: form.orderTitle.value,
+          desc: form.orderDesc.value,
+          date: form.orderDate.value,
+          part: form.orderPart.value,
+          operator: form.orderOperator.value,
+          status: form.orderStatus.value,
+          urgent: form.orderUrgent.checked, // *** Added urgent
+        };
+
+        if (currentEvent) {
+          // Update existing
+          const idx = workOrders.findIndex(w => w.id === currentEvent.id);
+          if (idx !== -1) {
+            workOrders[idx] = newOrder;
+          }
+        } else {
+          // Add new
+          workOrders.push(newOrder);
+          // Alert check immediately for new urgent or close due wo
+          if (newOrder.urgent || (new Date(newOrder.date) - new Date()) <= 2 * 60 * 60 * 1000) {
+            checkAlerts();
+          }
+        }
+
+        saveWorkOrders();
+        // Show alert on creation with countdown
+if (!currentEvent) {
+  const timeLeft = formatTimeDifference(new Date(newOrder.date) - new Date());
+  showAlert(`✅ Work Order "${newOrder.title}" created. Time until due: ${timeLeft}.`);
+}
+
+        renderCalendar();
+        if (currentEvent && currentEvent.status !== 'Done' && newOrder.status === 'Done') {
+  showAlert(`🎉 Work Order "${newOrder.title}" marked as DONE!`);
+}
+        modal.style.display = 'none';
+      });
+
+      statusFilter.addEventListener('change', renderCalendar);
+      stationFilter.addEventListener('change', renderCalendar);
+
+      // Initial render
+      renderCalendar();
     });
+   loadRecurringLastAdded();
+addRecurringTasks();
+setInterval(addRecurringTasks, RECURRING_INTERVAL_MS);
 
-    // Add Work Order button opens empty form modal
-    addOrderBtn.addEventListener('click', () => openModal());
 
-    // Initialize calendar
-    calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth',
-      selectable: true,
-      height: 'auto',
-      headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay'
-      },
-      events: loadEvents(),
-      eventClick(info) {
-        openModal(info.event);
-      },
-    });
-
-    loadChatData();
-    calendar.render();
-  });
-</script>
-
+  </script>
 </body>
 </html>

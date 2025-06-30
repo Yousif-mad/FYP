@@ -6,41 +6,445 @@
   <title>Inventory</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f9f9f9;
+      color: #333;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100vh;
+      width: 100px;
+      background-color: #2f3e4e;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+    }
+    .sidebar #image {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      margin: 0;
+      padding-bottom: 120px;
+      display: block;
+    }
+    .nav-item {
+      color: #a9b3c1;
+      text-align: center;
+      margin: 20px 0;
+      cursor: pointer;
+      width: 70px;
+      transition: color 0.3s ease, background-color 0.3s ease;
+      border-radius: 12px;
+      padding: 10px 0;
+    }
+
+    .nav-item.active,
+    .nav-item:hover {
+      background: #3a9bdc;
+      color: white;
+    }
+
+    /* Dark mode toggle button */
+    #darkModeToggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 999;
+      background: #f0f0f0;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s;
+      color: black;
+    }
+    #darkModeToggle:hover {
+      background-color: #ddd;
+    }
+
+    /* Main content area */
+    .main-content {
+      margin-left: 200px;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    /* Station Creation Form */
+    #stationForm {
+      margin-bottom: 30px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 600px;
+    }
+    #stationForm label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    #stationForm input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 12px;
+      border: 1.5px solid #ccc;
+      border-radius: 6px;
+      font-size: 1em;
+    }
+    #stationForm button {
+      padding: 10px 16px;
+      background: #4a90e2;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    #stationForm button:hover {
+      background: #357ABD;
+    }
+
+    /* Station parts table */
+    #stationsTable {
+      width: 100%;
+      max-width: 800px;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    #stationsTable th, #stationsTable td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+    #stationsTable th {
+      background: #4a90e2;
+      color: white;
+      font-weight: 600;
+    }
+    #stationsTable input[type="number"] {
+      width: 80px;
+      padding: 6px;
+      font-size: 1em;
+      border: 1.5px solid #ccc;
+      border-radius: 6px;
+    }
+
+    /* DARK MODE STYLES */
+    body.dark-mode {
+      background-color: #121212;
+      color: #f0f0f0;
+    }
+    body.dark-mode .sidebar {
+      background-color: #1a1a1a;
+      color: #ccc;
+    }
+    body.dark-mode .nav-item {
+      color: #bbb;
+    }
+    body.dark-mode .nav-item.active,
+    body.dark-mode .nav-item:hover {
+      background-color: #3a9bdc;
+      color: #fff;
+    }
+    body.dark-mode #darkModeToggle {
+      background-color: #333;
+      color: #f0f0f0;
+    }
+    body.dark-mode #darkModeToggle:hover {
+      background-color: #555;
+    }
+    body.dark-mode #stationForm,
+    body.dark-mode #stationsTable {
+      background-color: #1e1e1e;
+      box-shadow: 0 0 10px rgba(0,0,0,0.7);
+    }
+    body.dark-mode #stationsTable th, 
+    body.dark-mode #stationsTable td {
+      border-color: #444;
+    }
+    body.dark-mode #stationForm input[type="text"],
+    body.dark-mode #stationsTable input[type="number"] {
+      background-color: #2c2c2c;
+      border-color: #555;
+      color: #eee;
+    }
+    body.dark-mode #stationForm button {
+      background-color: #3a9bdc;
+      color: white;
+    }
+    body.dark-mode #stationForm button:hover {
+      background-color: #5aa0ee;
+    }
+  </style>
 </head>
 <body>
+
+  <!-- Sidebar -->
   <div class="sidebar">
-  <img id="image" src="logo1.jpeg" alt="logo.png">
-  
-  <a class="nav-item" href="index.html" title="Work Orders (WO)">
-    <i class="fas fa-tools"></i>
-    <span>WO</span>
-  </a>
+    <img id="image" src="logo1.jpeg" alt="logo.png" />
+    
+    <a class="nav-item" href="index.html" title="Work Orders (WO)">
+      <i class="fas fa-tools"></i>
+      <span>WO</span>
+    </a>
 
-  <a class="nav-item" href="assets.html" title="Assets">
-    <i class="fas fa-boxes"></i>
-    <span>Assets</span>
-  </a>
+    <a class="nav-item" href="assets.html" title="Assets">
+      <i class="fas fa-boxes"></i>
+      <span>Assets</span>
+    </a>
 
-  <a class="nav-item" href="inventory.html" title="Inventory">
-    <i class="fas fa-warehouse"></i>
-    <span>Inventory</span>
-  </a>
-</div>
+    <a class="nav-item" href="inventory.html" title="Inventory">
+      <i class="fas fa-warehouse"></i>
+      <span>Inventory</span>
+    </a>
+  </div>
 
-  
+  <!-- Dark Mode Toggle Button -->
+  <button id="darkModeToggle" title="Switch to Dark Mode">
+    <i class="fas fa-sun"></i>
+  </button>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1>Inventory - Stations & Parts</h1>
+
+    <!-- Station creation form -->
+    <form id="stationForm">
+      <label for="stationNameInput">Add New Station</label>
+      <input type="text" id="stationNameInput" placeholder="Station name" required />
+      <button type="submit">Add Station</button>
+    </form>
+
+    <!-- Stations parts table -->
+    <table id="stationsTable" aria-label="Stations parts and quantities">
+      <thead>
+        <tr>
+          <th>Station Name</th>
+          <th>Part</th>
+          <th>Quantity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- dynamically generated rows here -->
+      </tbody>
+    </table>
+  </div>
+
   <script>
-  const currentPage = window.location.pathname.split("/").pop();
-  const navItems = document.querySelectorAll(".nav-item");
+    // Dark mode toggle logic
+    const darkToggle = document.getElementById('darkModeToggle');
+    const darkIcon = darkToggle.querySelector('i');
 
-  navItems.forEach(item => {
-    const href = item.getAttribute("href");
-    if (href === currentPage) {
-      item.classList.add("active");
-    } else {
-      item.classList.remove("active");
+    function updateDarkModeButton() {
+      if (document.body.classList.contains('dark-mode')) {
+        darkIcon.className = 'fas fa-moon';
+        darkToggle.style.background = '#333';
+        darkToggle.style.color = '#f0f0f0';
+        darkToggle.title = "Switch to Light Mode";
+      } else {
+        darkIcon.className = 'fas fa-sun';
+        darkToggle.style.background = '#f0f0f0';
+        darkToggle.style.color = '#000';
+        darkToggle.title = "Switch to Dark Mode";
+      }
     }
-  });
-</script>
 
+    darkToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+      updateDarkModeButton();
+    });
+
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+    }
+    updateDarkModeButton();
+
+
+    // Navigation active class logic
+    const currentPage = window.location.pathname.split("/").pop();
+    const navItems = document.querySelectorAll(".nav-item");
+    navItems.forEach(item => {
+      const href = item.getAttribute("href");
+      if (href === currentPage) {
+        item.classList.add("active");
+      } else {
+        item.classList.remove("active");
+      }
+    });
+
+
+    // Station and parts logic
+
+    // Data format example: 
+    // stations = [{name: "Station A", parts: [{part: "Part 1", quantity: 3}, {part:"Part 2", quantity:0}]}]
+    let stations = JSON.parse(localStorage.getItem("stationsInventory")) || [];
+
+    const stationForm = document.getElementById("stationForm");
+    const stationNameInput = document.getElementById("stationNameInput");
+    const stationsTableBody = document.querySelector("#stationsTable tbody");
+
+    // Render stations table with parts and quantity inputs
+    function renderStationsTable() {
+      stationsTableBody.innerHTML = "";
+
+      stations.forEach((station, stationIdx) => {
+        if (!station.parts || station.parts.length === 0) {
+          // If no parts, show station with empty part & quantity input row for adding parts
+          const tr = document.createElement("tr");
+
+          const tdStationName = document.createElement("td");
+          tdStationName.textContent = station.name;
+          tr.appendChild(tdStationName);
+
+          const tdPart = document.createElement("td");
+          const partInput = document.createElement("input");
+          partInput.type = "text";
+          partInput.placeholder = "Add part name...";
+          partInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" && partInput.value.trim()) {
+              addPartToStation(stationIdx, partInput.value.trim());
+              partInput.value = "";
+              e.preventDefault();
+            }
+          });
+          tdPart.appendChild(partInput);
+          tr.appendChild(tdPart);
+
+          const tdQty = document.createElement("td");
+          tdQty.textContent = "-";
+          tr.appendChild(tdQty);
+
+          stationsTableBody.appendChild(tr);
+        } else {
+          // Render each part as a row with quantity input
+          station.parts.forEach((partObj, partIdx) => {
+            const tr = document.createElement("tr");
+
+            // Station name only on first part row for each station
+            const tdStationName = document.createElement("td");
+            if (partIdx === 0) {
+              tdStationName.textContent = station.name;
+              tdStationName.rowSpan = station.parts.length;
+            } else {
+              tdStationName.style.display = "none";
+            }
+            tr.appendChild(tdStationName);
+
+            // Part name (editable)
+            const tdPart = document.createElement("td");
+            const partInput = document.createElement("input");
+            partInput.type = "text";
+            partInput.value = partObj.part;
+            partInput.style.width = "90%";
+            partInput.addEventListener("change", () => {
+              stations[stationIdx].parts[partIdx].part = partInput.value.trim();
+              saveStations();
+              renderStationsTable();
+            });
+            tdPart.appendChild(partInput);
+            tr.appendChild(tdPart);
+
+            // Quantity input
+            const tdQty = document.createElement("td");
+            const qtyInput = document.createElement("input");
+            qtyInput.type = "number";
+            qtyInput.min = "0";
+            qtyInput.value = partObj.quantity;
+            qtyInput.addEventListener("change", () => {
+              stations[stationIdx].parts[partIdx].quantity = parseInt(qtyInput.value) || 0;
+              saveStations();
+            });
+            tdQty.appendChild(qtyInput);
+            tr.appendChild(tdQty);
+
+            stationsTableBody.appendChild(tr);
+          });
+
+          // Add new part input row below parts for this station
+          const trAddPart = document.createElement("tr");
+          const tdBlank = document.createElement("td");
+          tdBlank.textContent = "";
+          tdBlank.style.border = "none";
+          trAddPart.appendChild(tdBlank);
+
+          const tdNewPart = document.createElement("td");
+          const addPartInput = document.createElement("input");
+          addPartInput.type = "text";
+          addPartInput.placeholder = "Add new part...";
+          addPartInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" && addPartInput.value.trim()) {
+              addPartToStation(stationIdx, addPartInput.value.trim());
+              addPartInput.value = "";
+              e.preventDefault();
+            }
+          });
+          tdNewPart.appendChild(addPartInput);
+          trAddPart.appendChild(tdNewPart);
+
+          const tdNewQty = document.createElement("td");
+          tdNewQty.textContent = "-";
+          trAddPart.appendChild(tdNewQty);
+
+          stationsTableBody.appendChild(trAddPart);
+        }
+      });
+    }
+
+    function addPartToStation(stationIndex, partName) {
+      if (!stations[stationIndex].parts) {
+        stations[stationIndex].parts = [];
+      }
+      stations[stationIndex].parts.push({ part: partName, quantity: 0 });
+      saveStations();
+      renderStationsTable();
+    }
+
+    function saveStations() {
+      localStorage.setItem("stationsInventory", JSON.stringify(stations));
+    }
+
+    // Handle new station form submission
+    stationForm.addEventListener("submit", e => {
+      e.preventDefault();
+      const stationName = stationNameInput.value.trim();
+      if (!stationName) return alert("Please enter a station name.");
+
+      // Check if station already exists
+      const exists = stations.some(s => s.name.toLowerCase() === stationName.toLowerCase());
+      if (exists) {
+        alert("Station already exists.");
+        return;
+      }
+
+      stations.push({ name: stationName, parts: [] });
+      saveStations();
+      renderStationsTable();
+      stationNameInput.value = "";
+    });
+
+    // Initial render
+    renderStationsTable();
+  </script>
 </body>
 </html>
