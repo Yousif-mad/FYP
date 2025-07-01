@@ -10,6 +10,7 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
   />
   <style>
+    /* Sidebar */
     .sidebar {
       position: fixed;
       left: 0;
@@ -22,6 +23,7 @@
       align-items: center;
       padding: 0;
       box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+      z-index: 1000;
     }
     .sidebar #image {
       width: 100%;
@@ -31,7 +33,7 @@
       padding-bottom: 120px;
       display: block;
     }
-    /* Nav items container */
+    /* Nav items */
     .nav-item {
       color: #a9b3c1;
       text-align: center;
@@ -41,40 +43,36 @@
       transition: color 0.3s ease, background-color 0.3s ease;
       border-radius: 12px;
       padding: 10px 0;
+      text-decoration: none;
+      user-select: none;
     }
-
-    /* Icon style */
     .nav-item i {
       font-size: 28px;
       display: block;
       margin-bottom: 8px;
     }
-
-    /* Text below icon */
     .nav-item span {
       font-size: 14px;
       font-weight: 600;
       letter-spacing: 0.04em;
     }
-
-    /* Hover effect */
     .nav-item:hover {
       color: #ffffff;
       background-color: #1e90ff;
       box-shadow: 0 4px 12px rgba(30,144,255,0.6);
     }
-
-    /* Active state */
     .nav-item.active {
       color: #ffffff;
       background-color: #007acc;
       box-shadow: 0 4px 15px rgba(0,122,204,0.8);
     }
+    /* Main body */
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 20px;
+      margin: 20px 20px 20px 120px; /* Leave space for sidebar */
       background: #f9fafb;
       color: #333;
+      min-height: 100vh;
     }
     h1 {
       text-align: center;
@@ -104,7 +102,6 @@
       color: white !important;
       box-shadow: 0 0 8px #2980b9;
     }
-    /* Urgent event styling */
     .fc-event.urgent-event {
       background-color: #e74c3c !important;
       border-color: #c0392b !important;
@@ -124,11 +121,29 @@
       transition: background-color 0.3s ease;
       box-shadow: 0 3px 6px rgb(0 0 0 / 0.2);
       user-select: none;
+      width: 200px;
     }
     button#addOrderBtn:hover {
       background: #2ecc71;
     }
-    /* Modal styles */
+    button#clearCalendarBtn {
+      display: block;
+      margin: 0 auto 25px auto;
+      padding: 12px 25px;
+      font-size: 1.1rem;
+      border: none;
+      background: #c0392b;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 3px 6px rgb(0 0 0 / 0.2);
+      user-select: none;
+      width: 200px;
+    }
+    button#clearCalendarBtn:hover {
+      background: #e74c3c;
+    }
+    /* Modal */
     .modal {
       display: none;
       position: fixed;
@@ -190,7 +205,6 @@
       min-height: 80px;
       font-family: inherit;
     }
-    /* Disabled Part field */
     select[disabled] {
       background: #f0f0f0;
       color: #7f8c8d;
@@ -227,14 +241,18 @@
     button#cancelBtn:hover {
       background-color: #95a5a6;
     }
-
-    /* Status select */
+    button#deleteBtn {
+      background-color: #e74c3c;
+      color: white;
+      display: none;
+    }
+    button#deleteBtn:hover {
+      background-color: #c0392b;
+    }
     select#orderStatus {
       font-weight: 600;
       color: #34495e;
     }
-
-    /* Urgent checkbox container */
     .form-group.urgent-group {
       flex-direction: row;
       align-items: center;
@@ -246,8 +264,7 @@
       user-select: text;
       color: #e74c3c;
     }
-
-    /* Right panel - Chat */
+    /* Right panel chat */
     .right-panel {
       flex: 1;
       background: #f5f8fa;
@@ -256,6 +273,7 @@
       flex-direction: column;
       padding: 20px;
       box-sizing: border-box;
+      overflow-y: auto;
     }
     .right-panel h3 {
       margin-top: 0;
@@ -330,8 +348,7 @@
       cursor: not-allowed;
       box-shadow: none;
     }
-    
-    
+    /* Background watermark */
     body::before {
       content: "";
       position: fixed;
@@ -343,35 +360,10 @@
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      opacity: 0.5; /* Adjust to your preference */
-      z-index: -1;  /* Push behind all content */
+      opacity: 0.5;
+      z-index: -1;
     }
-
-    /* Info bar */
-    .info-bar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      background-color: #2980b9;
-      color: white;
-      padding: 10px 20px;
-      font-weight: bold;
-      display: none;
-      z-index: 3000;
-      animation: slideDown 0.5s ease forwards;
-      user-select: none;
-    }
-    @keyframes slideDown {
-      from {
-        transform: translateY(-100%);
-      }
-      to {
-        transform: translateY(0);
-      }
-    }
-
-    /* Alert bar styling */
+    /* Alert bar */
     .alert-bar {
       position: fixed;
       top: 50px;
@@ -392,661 +384,1109 @@
     .alert-bar i {
       font-size: 24px;
     }
+    /* Dark mode toggle button */
     #darkModeToggle {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  background-color: #ffffff;
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background-color: #ffffff;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      font-size: 20px;
+      color: #f39c12;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 4000;
+      user-select: none;
+    }
+    #darkModeToggle:hover {
+      background-color: #e0f7fa;
+      transform: scale(1.1);
+    }
+    body.dark-mode #darkModeToggle {
+      background-color: #2c3e50;
+      color: #ecf0f1;
+    }
+    body.dark-mode #darkModeToggle:hover {
+      background-color: #34495e;
+    }
+    #darkModeToggle:focus {
+      outline: 3px solid #2980b9;
+      outline-offset: 2px;
+    }
+    /* Dark mode styles */
+    body.dark-mode {
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+    body.dark-mode #calendar {
+      background: #212121;
+      color: #e0e0e0;
+      box-shadow: 0 4px 10px rgb(255 255 255 / 0.1);
+    }
+    body.dark-mode .sidebar {
+      background-color: #1c2733;
+      box-shadow: 2px 0 8px rgba(255,255,255,0.1);
+    }
+    body.dark-mode .nav-item {
+      color: #a9b3c1;
+    }
+    body.dark-mode .nav-item:hover,
+    body.dark-mode .nav-item.active {
+      color: #f39c12;
+      background-color: transparent;
+      box-shadow: none;
+    }
+    body.dark-mode button#addOrderBtn {
+      background-color: #27ae60;
+      color: #e0e0e0;
+      box-shadow: 0 3px 6px rgb(0 0 0 / 0.8);
+    }
+    body.dark-mode button#clearCalendarBtn {
+      background-color: #c0392b;
+      box-shadow: 0 3px 6px rgb(0 0 0 / 0.8);
+    }
+    body.dark-mode button#addOrderBtn:hover {
+      background-color: #2ecc71;
+    }
+    body.dark-mode button#clearCalendarBtn:hover {
+      background-color: #e74c3c;
+    }
+    body.dark-mode .modal-content {
+      background: #333;
+      color: #e0e0e0;
+    }
+    body.dark-mode input[type="text"],
+    body.dark-mode input[type="date"],
+    body.dark-mode select,
+    body.dark-mode textarea {
+      background-color: #222;
+      border-color: #555;
+      color: #e0e0e0;
+    }
+    body.dark-mode input[type="text"]:focus,
+    body.dark-mode input[type="date"]:focus,
+    body.dark-mode select:focus,
+    body.dark-mode textarea:focus {
+      border-color: #f39c12;
+      box-shadow: 0 0 8px #f39c12;
+      outline: none;
+    }
+    body.dark-mode .right-panel {
+      background: #222;
+      border-color: #555;
+      color: #e0e0e0;
+    }
+    body.dark-mode #chatInput {
+      background-color: #222;
+      color: #e0e0e0;
+      border-color: #555;
+    }
+    body.dark-mode #sendChatBtn {
+      background-color: #27ae60;
+      box-shadow: 0 3px 6px rgb(0 0 0 / 0.8);
+    }
+    body.dark-mode #sendChatBtn:disabled {
+      background-color: #555;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .filter-bar {
+      max-width: 900px;
+      margin: 0 auto 20px auto;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .filter-btn {
+      padding: 10px 18px;
+      border: none;
+      background-color: #3498db;
+      color: white;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+      user-select: none;
+    }
+
+    .filter-btn:hover {
+      background-color: #2980b9;
+    }
+
+    .filter-btn.active {
+      background-color: #1abc9c;
+      box-shadow: 0 0 10px #1abc9c;
+    }
+
+    body.dark-mode .filter-btn {
+      background-color: #3a3a3a;
+      color: #f0f0f0;
+    }
+
+    body.dark-mode .filter-btn:hover {
+      background-color: #555;
+    }
+
+    body.dark-mode .filter-btn.active {
+      background-color: #16a085;
+      box-shadow: 0 0 10px #16a085;
+    }
+    /* Buttons container */
+#viewToggleContainer {
+  margin: 1rem 0;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-start; /* Align left, you can change to center or right */
+}
+
+/* Shared button styles (same as your other buttons) */
+#calendarViewBtn,
+#tableViewBtn {
+  background-color: #3498db; /* Blue color */
+  color: white;
   border: none;
-  padding: 10px 14px;
-  border-radius: 50%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  font-size: 20px;
-  color: #f39c12;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 5px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 4000;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16);
 }
 
-#darkModeToggle:hover {
-  background-color: #e0f7fa;
-  transform: scale(1.1);
+#calendarViewBtn:hover:not(:disabled),
+#tableViewBtn:hover:not(:disabled) {
+  background-color: #2980b9;
+  transform: translateY(-2px);
 }
 
-body.dark-mode #darkModeToggle {
-  background-color: #2c3e50;
-  color: #ecf0f1;
+#calendarViewBtn:disabled,
+#tableViewBtn:disabled {
+  background-color: #95a5a6;
+  cursor: default;
+  transform: none;
+  box-shadow: none;
 }
 
-body.dark-mode #darkModeToggle:hover {
-  background-color: #34495e;
+/* Table container */
+#tableViewContainer {
+  margin-top: 1rem;
+  overflow-x: auto; /* Horizontal scroll on small screens */
 }
 
-#darkModeToggle:active {
-  transform: scale(0.95);
-}
-/* Overall background and text */
-body.dark-mode {
-  background-color: #121212;
-  color: #f0f0f0;
-}
-
-/* Calendar container */
-body.dark-mode #calendar {
-  background-color: #1e1e1e;
-  color: #f0f0f0;
+/* Table styles */
+#workOrdersTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
 }
 
-/* Modal + Form */
-body.dark-mode .modal-content,
-body.dark-mode #workOrderForm {
-  background-color: #222;
+/* Table header */
+#workOrdersTable thead {
+  background-color: #2980b9;
+  color: white;
+  user-select: none;
+}
+
+#workOrdersTable thead th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Table body */
+#workOrdersTable tbody tr {
+  border-bottom: 1px solid #ddd;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+#workOrdersTable tbody tr:hover {
+  background-color: #f1f8ff;
+}
+
+/* Table cells */
+#workOrdersTable tbody td {
+  padding: 0.6rem 1rem;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+/* Responsive - make sure buttons and table don't overflow container */
+@media (max-width: 600px) {
+  #viewToggleContainer {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  #calendarViewBtn,
+  #tableViewBtn {
+    width: 100%;
+  }
+}
+body.dark-mode #tableViewContainer {
+  background-color: #121212; /* dark container bg */
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+body.dark-mode #workOrdersTable {
+  background-color: #1e1e1e; /* dark table bg */
+  color: #ddd; /* light text */
+  box-shadow: 0 4px 8px rgba(255,255,255,0.1);
+}
+
+body.dark-mode #workOrdersTable thead {
+  background-color: #333; /* darker header */
   color: #eee;
 }
 
-/* Inputs and Textareas */
-body.dark-mode input,
-body.dark-mode textarea,
-body.dark-mode select {
-  background-color: #2c2c2c;
-  color: #eee;
-  border: 1.5px solid #555;
+body.dark-mode #workOrdersTable tbody tr {
+  border-bottom: 1px solid #444;
 }
 
-/* Sidebar */
-body.dark-mode .sidebar {
-  background-color: #1a1a1a;
-}
-
-/* Nav Items */
-body.dark-mode .nav-item {
-  color: #ccc;
-}
-body.dark-mode .nav-item:hover,
-body.dark-mode .nav-item.active {
-  background-color: #3a9bdc;
+body.dark-mode #workOrdersTable tbody tr:hover {
+  background-color: #333844; /* subtle highlight on hover */
   color: #fff;
 }
 
-/* Buttons */
-body.dark-mode button {
-  background-color: #2980b9;
+body.dark-mode #workOrdersTable tbody td {
+  color: #ddd;
+}
+
+/* Optional: make the table header pointer icon lighter in dark */
+body.dark-mode #dateHeader {
+  color: #ccc;
+}/* Container for toggle buttons */
+#viewToggleGroup {
+  display: ce;
+  border-radius: 30px;
+  background: var(--btn-bg, #f0f0f0);
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 1rem auto; /* center horizontally with vertical spacing */
+  padding: 0;
+  user-select: none;
+  justify-content: center;
+
+  /* center container horizontally */
+  width: fit-content;
+}
+
+/* Shared button styles */
+#viewToggleGroup button {
+  border: none;
+  background: none;
+  padding: 0.5rem 1.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--btn-text, #555);
+  transition: background-color 0.3s, color 0.3s;
+  user-select: none;
+}
+
+/* Rounded corners on edges */
+#viewToggleGroup button:first-child {
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+}
+#viewToggleGroup button:last-child {
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+
+/* Active button style */
+#viewToggleGroup button.active {
+  background-color: #4a90e2;
+  color: white;
+  box-shadow: 0 4px 10px rgba(74,144,226,0.4);
+}
+
+/* Hover for inactive */
+#viewToggleGroup button:hover:not(.active) {
+  background-color: #dde9fb;
+  color: #4a90e2;
+}
+
+/* Dark mode styles */
+body.dark-mode #viewToggleGroup {
+  background: #2c2c2c;
+  box-shadow: 0 0 10px rgba(255,255,255,0.1);
+}
+body.dark-mode #viewToggleGroup button {
+  color: #aaa;
+}
+body.dark-mode #viewToggleGroup button.active {
+  background-color: #357abd;
+  box-shadow: 0 4px 10px rgba(53,122,189,0.7);
   color: white;
 }
-body.dark-mode button:hover {
-  background-color: #3498db;
-}
-
-/* Alert Bar */
-body.dark-mode .alert-bar {
-  background-color: #c0392b;
-}
-
-/* Chat Panel */
-body.dark-mode .right-panel {
-  background-color: #1f1f1f;
-}
-body.dark-mode .chat-message {
-  background-color: #2c2c2c;
-  color: #f0f0f0;
+body.dark-mode #viewToggleGroup button:hover:not(.active) {
+  background-color: #3a3a3a;
+  color: #7aa9e9;
 }
 
 
   </style>
 </head>
 <body>
-  <div class="sidebar">
-    <img id="image" src="logo1.jpeg" alt="logo.png">
+  <div class="sidebar" role="navigation" aria-label="Main navigation">
+    <img id="image" src="logo1.jpeg" alt="Company logo" />
     
-    <a class="nav-item" href="index.html" title="Work Orders (WO)">
-      <i class="fas fa-tools"></i>
+    <a class="nav-item" href="index.html" title="Work Orders (WO)" aria-current="page">
+      <i class="fas fa-tools" aria-hidden="true"></i>
       <span>WO</span>
     </a>
 
     <a class="nav-item" href="assets.html" title="Assets">
-      <i class="fas fa-boxes"></i>
+      <i class="fas fa-boxes" aria-hidden="true"></i>
       <span>Assets</span>
     </a>
 
     <a class="nav-item" href="inventory.html" title="Inventory">
-      <i class="fas fa-warehouse"></i>
+      <i class="fas fa-warehouse" aria-hidden="true"></i>
       <span>Inventory</span>
     </a>
   </div>
 
-  <h1>Work Orders Calendar</h1>
+  <h1 id="pageTitle">Work Orders Calendar</h1>
+
   <button id="darkModeToggle" title="Toggle Dark Mode" aria-label="Toggle Dark Mode">
-  <i class="fas fa-sun"></i>
-</button>
+    <i class="fas fa-sun" aria-hidden="true"></i>
+  </button>
 
+  <div class="filter-bar" role="region" aria-label="Work order filters" style="max-width:900px;margin:0 auto 25px auto;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;">
+    <button class="filter-btn active" data-filter="All" data-type="status" aria-pressed="true">All Status</button>
+    <button class="filter-btn" data-filter="To Do" data-type="status" aria-pressed="false">To Do</button>
+    <button class="filter-btn" data-filter="Done" data-type="status" aria-pressed="false">Done</button>
 
-  <!-- Filters container -->
-  <div style="max-width: 900px; margin: 0 auto 15px auto; display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; user-select:none;">
-    <!-- Status filter -->
-    <div>
-      <label for="statusFilter"><strong>Status Filter:</strong></label><br />
-      <select id="statusFilter" style="padding: 5px; border-radius: 5px; border: 1.5px solid #ccc; font-size: 1rem;">
-        <option value="All">All</option>
-        <option value="Pending">Pending</option>
-        <option value="In Progress">In Progress</option>
-        <option value="Done">Done</option>
-      </select>
-    </div>
-
-    <!-- Station filter -->
-    <div>
-      <label for="stationFilter"><strong>Station Filter:</strong></label><br />
-      <select id="stationFilter" style="padding: 5px; border-radius: 5px; border: 1.5px solid #ccc; font-size: 1rem;">
-        <option value="All">All</option>
-        <option value="Engine">Engine</option>
-        <option value="Electrical">Electrical</option>
-        <option value="Hydraulics">Hydraulics</option>
-        <option value="Pneumatics">Pneumatics</option>
-        <option value="Other">Other</option>
-      </select>
-    </div>
+    <button class="filter-btn active" data-filter="All" data-type="station" aria-pressed="true">All Stations</button>
+    <button class="filter-btn" data-filter="Boiler Station" data-type="station" aria-pressed="false">Boiler Stations</button>
+    <button class="filter-btn" data-filter="Palm Oil Station" data-type="station" aria-pressed="false">Palm Oil Station</button>
+    
+    <button class="filter-btn" data-filter="Urgent" data-type="urgent" aria-pressed="false" style="background-color:#e74c3c; color:white;">Urgent Only</button>
   </div>
+  
+
+
 
   <div id="buttonContainer" style="max-width: 900px; margin: 0 auto 25px auto; display: flex; flex-direction: column; align-items: center; gap: 12px;">
-  <button id="addOrderBtn" style="width: 200px;">Add Work Order</button>
-  <button id="clearCalendarBtn" style="width: 200px; background-color:#c0392b; color:white; border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 3px 6px rgb(0 0 0 / 0.2); user-select:none;">Clear Calendar</button>
+    <button id="addOrderBtn" aria-haspopup="dialog" aria-controls="orderModal">Add Work Order</button>
+    <button id="clearCalendarBtn" style="background-color:#c0392b; color:white;" aria-label="Clear all work orders from calendar">Clear Calendar</button>
+  </div>
+  
+
+<div id="viewToggleGroup" aria-label="Toggle calendar or table view" role="group">
+  <button id="calendarViewBtn" class="active" aria-pressed="true">
+    📅 Calendar
+  </button>
+  <button id="tableViewBtn" aria-pressed="false">
+    📋 Table
+  </button>
 </div>
-  <div id="calendar"></div>
+  <div id="calendar" aria-label="Work orders calendar"></div>
+  <div id="tableViewContainer" style="display:none;">
+  <table id="workOrdersTable" border="1" style="width:100%; border-collapse: collapse;">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th id="dateHeader" style="cursor:pointer; text-decoration: underline;">Date &#x25B2;&#x25BC;</th>
+        <th>Part</th>
+        <th>Operator</th>
+        <th>Status</th>
+        <th>Urgent</th>
+        <th>Recurring</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Rows will be inserted dynamically -->
+    </tbody>
+  </table>
+</div>
 
-  <div class="modal" id="orderModal">
+  <div class="modal" id="orderModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc" tabindex="-1">
     <div class="modal-content">
-      <form id="workOrderForm" autocomplete="off">
-        <div class="form-group">
-          <label for="orderTitle">Title</label>
-          <input type="text" id="orderTitle" name="orderTitle" required />
-        </div>
-        <div class="form-group">
-          <label for="orderDesc">Description</label>
-          <textarea id="orderDesc" name="orderDesc" required></textarea>
-        </div>
-        <div class="form-group">
-          <label for="orderDate">Date</label>
-          <input type="date" id="orderDate" name="orderDate" required />
-        </div>
-        <div class="form-group">
-          <label for="orderPart">Part</label>
-          <select id="orderPart" name="orderPart" required>
-            <option value="Engine">Engine</option>
-            <option value="Electrical">Electrical</option>
-            <option value="Hydraulics">Hydraulics</option>
-            <option value="Pneumatics">Pneumatics</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="orderOperator">Operator</label>
-          <select id="orderOperator" name="orderOperator" required>
-            <option value="">Select Operator</option>
-            <option value="John Doe">John Doe</option>
-            <option value="Jane Smith">Jane Smith</option>
-            <option value="Ali Khan">Ali Khan</option>
-            <option value="Maria Garcia">Maria Garcia</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="orderStatus">Status</label>
-          <select id="orderStatus" name="orderStatus" required>
-            <option value="Pending">Pending</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Done">Done</option>
-          </select>
-        </div>
+     <form id="workOrderForm" autocomplete="off">
+  <h2 id="modalTitle">Add Work Order</h2>
+  <div id="modalDesc" style="margin-bottom:15px;">Fill the details below and save your work order.</div>
 
-        <!-- Urgent checkbox - *** Added -->
-        <div class="form-group urgent-group">
-          <input type="checkbox" id="orderUrgent" name="orderUrgent" />
-          <label for="orderUrgent">Mark as Urgent</label>
-        </div>
+  <div class="form-group">
+    <label for="orderTitle">Title</label>
+    <input type="text" id="orderTitle" name="orderTitle" required autocomplete="off" />
+  </div>
 
-        <div class="button-row">
-          <button type="submit" id="saveBtn">Save</button>
-          <button type="button" id="cancelBtn">Cancel</button>
-          <button type="button" id="deleteBtn" style="background-color:#e74c3c; color:white; display:none;">Delete</button>
-        </div>
-      </form>
+  <div class="form-group">
+    <label for="orderDesc">Description</label>
+    <textarea id="orderDesc" name="orderDesc" required></textarea>
+  </div>
 
-      <!-- Chat Panel (only visible in edit mode) -->
-      <div class="right-panel" id="chatPanel" style="display:none;">
+  <div class="form-group">
+    <label for="orderDate">Date</label>
+    <input type="date" id="orderDate" name="orderDate" required />
+  </div>
+
+  <div class="form-group">
+    <label for="orderPart">Part</label>
+    <select id="orderPart" name="orderPart" required>
+      <option value="Boiler Station">Boiler Station</option>
+      <option value="Palm Oil Station">Palm Oil Station</option>
+      
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="orderOperator">Operator</label>
+    <select id="orderOperator" name="orderOperator" required>
+      <option value="">Select Operator</option>
+      <option value="Yousif Abu Taam">Yousif Abu Taam</option>
+     
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="orderStatus">Status</label>
+    <select id="orderStatus" name="orderStatus" required>
+      <option value="To Do">To Do</option>
+      <option value="Done">Done</option>
+    </select>
+  </div>
+
+  <div class="form-group urgent-group">
+    <input type="checkbox" id="orderUrgent" name="orderUrgent" />
+    <label for="orderUrgent" style="color:#e74c3c;">Mark as Urgent</label>
+  </div>
+
+  <!-- Recurring checkbox -->
+   
+  <div class="form-group">
+    <label style="color: #007acc;">
+  <input type="checkbox" id="orderRecurring" name="orderRecurring" />
+   Is Recurring?
+</label>
+  </div>
+
+  <!-- Recurrence frequency (hidden by default) -->
+  <div class="form-group" id="recurrenceSettings" style="display:none;">
+    <label for="orderFrequency">Recurrence Frequency</label>
+    <select id="orderFrequency" name="orderFrequency">
+      <option value="none">None</option>
+      <option value="daily">Daily</option>
+      <option value="weekly">Weekly</option>
+      <option value="monthly">Monthly</option>
+    </select>
+  </div>
+
+  <!-- Recurrence end date (hidden by default) -->
+  <div class="form-group" id="recurrenceEndDateContainer" style="display:none;">
+    <label for="orderRecurrenceEndDate">Recurrence End Date</label>
+    <input type="date" id="orderRecurrenceEndDate" name="orderRecurrenceEndDate" />
+  </div>
+
+  <div class="button-row">
+    <button type="submit" id="saveBtn">Save</button>
+    <button type="button" id="cancelBtn">Cancel</button>
+    <button type="button" id="deleteBtn" style="background-color:#e74c3c; color:white; display:none;">Delete</button>
+  </div>
+</form>
+
+
+      <div class="right-panel" id="chatPanel" aria-live="polite" aria-relevant="additions" style="display:none;">
         <h3>Chat</h3>
-        <div id="chatMessages" aria-live="polite" aria-relevant="additions"></div>
-        <textarea id="chatInput" placeholder="Type message..." rows="2"></textarea>
+        <div id="chatMessages" tabindex="0" style="min-height:150px;"></div>
+        <textarea id="chatInput" placeholder="Type message..." rows="2" aria-label="Chat input"></textarea>
         <button id="sendChatBtn" disabled>Send</button>
       </div>
     </div>
   </div>
 
-  <!-- Alert bar -->
   <div id="alertBar" class="alert-bar" style="display:none;">
-    <i class="fas fa-exclamation-triangle"></i>
+    <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
     <span id="alertText"></span>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
-  <script>
-    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-     let workOrders = JSON.parse(localStorage.getItem('workOrders')) || [];
-    const recurringTasks = [
-  {
-    id: 'recurring-1',
-    title: 'Recurring check at Station A',
-    station: 'Station A',
-    intervalSeconds: 10800,
-    status: 'pending',
-    lastAdded: 0, // timestamp to track last addition
-  },
-  // Add more recurring tasks here if needed
-];
-const RECURRING_INTERVAL_MS = 3 * 60 * 60 * 1000; // 3 hours
-function loadRecurringLastAdded() {
-  const saved = localStorage.getItem('recurringLastAdded');
-  if (saved) {
-    const parsed = JSON.parse(saved);
-    recurringTasks.forEach(task => {
-      if (parsed[task.id]) {
-        task.lastAdded = parsed[task.id];
-      }
-    });
+ <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+<script>
+  function matchesFilter(wo) {
+  // Status filter (show all if 'All')
+  const statusMatch = (currentStatus === 'All' || wo.status === currentStatus);
+
+  // Station filter: make lowercase, partial match allowed, 'all' disables filtering
+  const stationFilterValue = currentStation.toLowerCase();
+  const partValue = (wo.part || '').toLowerCase();
+  const stationMatch = (stationFilterValue === 'all' || partValue.includes(stationFilterValue));
+
+  // Urgent filter (show only urgent if toggled on)
+  const urgentMatch = (!showUrgentOnly || wo.urgent);
+
+  // Only pass work orders that match all filters
+  return statusMatch && stationMatch && urgentMatch;
+}
+  // === Variables & state ===
+  
+  let currentStatus = 'All';
+  let currentStation = 'all';
+  let showUrgentOnly = false;
+
+  let workOrders = JSON.parse(localStorage.getItem('workOrders')) || [];
+  let chatData = JSON.parse(localStorage.getItem('chatData')) || {};
+
+  // NEW: occurrenceStatus stores status for individual recurring occurrences
+  let occurrenceStatus = JSON.parse(localStorage.getItem('occurrenceStatus')) || {};
+
+  // New variables for view toggle and sorting
+  const calendarViewBtn = document.getElementById('calendarViewBtn');
+  const tableViewBtn = document.getElementById('tableViewBtn');
+  const tableViewContainer = document.getElementById('tableViewContainer');
+  const calendarEl = document.getElementById('calendar');
+  const workOrdersTableBody = document.querySelector('#workOrdersTable tbody');
+  const dateHeader = document.getElementById('dateHeader');
+
+  // Save occurrenceStatus to localStorage
+  function saveOccurrenceStatus() {
+    localStorage.setItem('occurrenceStatus', JSON.stringify(occurrenceStatus));
   }
-}
 
-// Save lastAdded times to localStorage
-function saveRecurringLastAdded() {
-  const data = {};
-  recurringTasks.forEach(task => {
-    data[task.id] = task.lastAdded || 0;
-  });
-  localStorage.setItem('recurringLastAdded', JSON.stringify(data));
-}
-function addRecurringTasks() {
-  const now = Date.now();
-
-  recurringTasks.forEach(recTask => {
-    if (!recTask.lastAdded || now - recTask.lastAdded >= RECURRING_INTERVAL_MS) {
-      const newTask = {
-        id: recTask.id + '-' + now,
-        title: recTask.title,
-        desc: 'Auto-generated recurring task',
-        date: new Date().toISOString(),
-        part: recTask.station || 'Other',
-        operator: 'System',
-        status: 'Pending',
-        urgent: false,
-        createdAt: now,
-        recurring: true,
-      };
-
-      tasks.push(newTask);
-      workOrders.push(newTask);
-
-      recTask.lastAdded = now;
-
-      saveRecurringLastAdded();
-
-      localStorage.setItem('workOrders', JSON.stringify(workOrders));
-      localStorage.setItem('tasks', JSON.stringify(tasks));
-
-      showAlert(`🔁 New recurring task added: "${newTask.title}"`);
-    }
-  });
-
-  renderCalendar();
-}
-
-
-
-
-    const darkToggle = document.getElementById('darkModeToggle');
-const darkIcon = darkToggle.querySelector('i');
-
-function updateDarkModeButton() {
-  if (document.body.classList.contains('dark-mode')) {
-    darkIcon.className = 'fas fa-moon';
-    darkToggle.title = "Switch to Light Mode";
-  } else {
-    darkIcon.className = 'fas fa-sun';
-    darkToggle.title = "Switch to Dark Mode";
-  }
-}
-
-darkToggle.addEventListener('click', () => {
-  document.body.classList.toggle('dark-mode');
-  localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-  updateDarkModeButton();
-});
-
-// Load saved preference
-if (localStorage.getItem('darkMode') === 'true') {
-  document.body.classList.add('dark-mode');
-}
-updateDarkModeButton();
-
-
-    document.addEventListener('DOMContentLoaded', function () {
-      const calendarEl = document.getElementById('calendar');
-      const addOrderBtn = document.getElementById('addOrderBtn');
-      const modal = document.getElementById('orderModal');
-      const form = document.getElementById('workOrderForm');
-      const cancelBtn = document.getElementById('cancelBtn');
-      const chatPanel = document.getElementById('chatPanel');
-      const chatMessages = document.getElementById('chatMessages');
-      const chatInput = document.getElementById('chatInput');
-      const sendChatBtn = document.getElementById('sendChatBtn');
-      const statusFilter = document.getElementById('statusFilter');
-      const stationFilter = document.getElementById('stationFilter');
-      const alertBar = document.getElementById('alertBar');
-      const alertText = document.getElementById('alertText');
-      const deleteBtn = document.getElementById('deleteBtn');
-const clearCalendarBtn = document.getElementById('clearCalendarBtn');
-
-deleteBtn.addEventListener('click', () => {
-  if (!currentEvent) return;
-
-  // Confirm delete
-  if (confirm(`Are you sure you want to DELETE the work order "${currentEvent.title}"?`)) {
-    // Remove from workOrders array
-    const index = workOrders.findIndex(w => w.id === currentEvent.id);
-    if (index !== -1) {
-      workOrders.splice(index, 1);
-      // Also remove chat data for this task
-      delete chatData[currentEvent.id];
-      saveChatData();
-      saveWorkOrders();
-
-      showAlert(`🗑️ Work Order "${currentEvent.title}" deleted.`);
-      modal.style.display = 'none';
-      renderCalendar();
-    }
-  }
-});
-
-// Show/hide delete button depending on if editing existing task
-function updateDeleteButtonVisibility() {
-  if (currentEvent) {
-    deleteBtn.style.display = 'inline-block';
-  } else {
-    deleteBtn.style.display = 'none';
-  }
-}
-
-// Update delete button visibility on opening modal
-addOrderBtn.addEventListener('click', () => {
-  currentEvent = null;
-  clearForm();
-  chatPanel.style.display = 'none';
-  updateDeleteButtonVisibility();
-  modal.style.display = 'flex';
-});
-
-calendarEl.addEventListener('click', (e) => {
-  // This is handled by FullCalendar eventClick - just update delete button in fillForm
-});
-
-function fillForm(wo) {
-  form.orderTitle.value = wo.title;
-  form.orderDesc.value = wo.desc;
-  form.orderDate.value = wo.date;
-  form.orderPart.value = wo.part;
-  form.orderOperator.value = wo.operator;
-  form.orderStatus.value = wo.status;
-  form.orderUrgent.checked = wo.urgent || false;
-  updateDeleteButtonVisibility();
-}
-
-// Clear Calendar button functionality
-clearCalendarBtn.addEventListener('click', () => {
-  if (confirm('Are you sure you want to CLEAR ALL work orders? This action cannot be undone.')) {
-    workOrders.length = 0; // clear array
-    tasks.length = 0; // also clear recurring tasks (if you want)
-    chatData = {};
-    saveWorkOrders();
-    saveChatData();
+  calendarViewBtn.addEventListener('click', () => {
+    calendarViewBtn.classList.add('active');
+    calendarViewBtn.setAttribute('aria-pressed', 'true');
+    tableViewBtn.classList.remove('active');
+    tableViewBtn.setAttribute('aria-pressed', 'false');
+    calendarEl.style.display = 'block';
+    tableViewContainer.style.display = 'none';
     renderCalendar();
-    showAlert('🗑️ All work orders cleared.');
-  }
-});
+  });
 
+  tableViewBtn.addEventListener('click', () => {
+    tableViewBtn.classList.add('active');
+    tableViewBtn.setAttribute('aria-pressed', 'true');
+    calendarViewBtn.classList.remove('active');
+    calendarViewBtn.setAttribute('aria-pressed', 'false');
+    calendarEl.style.display = 'none';
+    tableViewContainer.style.display = 'block';
+    renderTableView();
+  });
 
-      let calendar;
-      let currentEvent = null;
-     
-      let chatData = JSON.parse(localStorage.getItem('chatData')) || {};
-      
-      // Show alert bar
-      function showAlert(message) {
-        alertText.textContent = message;
-        alertBar.style.display = 'flex';
-        setTimeout(() => {
-          alertBar.style.display = 'none';
-        }, 15000);
-      }
+  let currentView = 'calendar';  // default view
+  let sortAscending = true;      // date sort order
 
-      // Format time difference in human readable form
-      function formatTimeDifference(diffMs) {
-        const minutes = Math.floor(diffMs / (1000 * 60));
-        if (minutes < 1) return 'less than a minute';
-        if (minutes < 60) return `${minutes} minute(s)`;
-        const hours = Math.floor(minutes / 60);
-        if (hours < 24) return `${hours} hour(s)`;
-        const days = Math.floor(hours / 24);
-        return `${days} day(s)`;
-      }
+  // === DOM references for recurrence ===
+  const orderRecurringCheckbox = document.getElementById('orderRecurring');
+  const recurrenceSettings = document.getElementById('recurrenceSettings');
+  const recurrenceEndDateContainer = document.getElementById('recurrenceEndDateContainer');
 
-      // Check for alerts on all work orders
-      function checkAlerts() {
-  const now = new Date();
-  let alerted = false;
-  for (const wo of workOrders) {
-    if (wo.status === 'Done') continue; // ✅ Skip done tasks
-
-    const dueDate = new Date(wo.date);
-    const diff = dueDate - now;
-
-    if (diff < 0) {
-      showAlert(`⚠️ Work Order "${wo.title}" is PAST DUE since ${formatTimeDifference(-diff)} ago!`);
-      alerted = true;
-      break;
-    } else if (diff <= 2 * 60 * 60 * 1000) {
-      showAlert(`⏳ Work Order "${wo.title}" is due in ${formatTimeDifference(diff)}.`);
-      alerted = true;
-      break;
+  // === Dark mode ===
+  const darkToggle = document.getElementById('darkModeToggle');
+  const darkIcon = darkToggle.querySelector('i');
+  function updateDarkModeButton() {
+    if (document.body.classList.contains('dark-mode')) {
+      darkIcon.className = 'fas fa-moon';
+      darkToggle.title = "Switch to Light Mode";
+    } else {
+      darkIcon.className = 'fas fa-sun';
+      darkToggle.title = "Switch to Dark Mode";
     }
   }
-  if (!alerted) {
-    alertBar.style.display = 'none';
+  darkToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    updateDarkModeButton();
+  });
+  if (localStorage.getItem('darkMode') === 'true') {
+    document.body.classList.add('dark-mode');
   }
-}
+  updateDarkModeButton();
 
+  // === Alert bar ===
+  const alertBar = document.getElementById('alertBar');
+  const alertText = document.getElementById('alertText');
+  function showAlert(message) {
+    alertText.textContent = message;
+    alertBar.style.display = 'flex';
+    setTimeout(() => {
+      alertBar.style.display = 'none';
+    }, 15000);
+  }
 
-      // Run alerts on interval every 2 hours (7200000ms)
-      setInterval(checkAlerts, 7200000);
-      // Run on startup
-      checkAlerts();
+  // === Filter buttons ===
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const type = btn.dataset.type;
+      const value = btn.dataset.filter;
 
-      function saveWorkOrders() {
-        localStorage.setItem('workOrders', JSON.stringify(workOrders));
-      }
-
-      function saveChatData() {
-        localStorage.setItem('chatData', JSON.stringify(chatData));
-      }
-
-      // Filter work orders by status and station
-      function filterWorkOrders() {
-        const status = statusFilter.value;
-        const station = stationFilter.value;
-
-        return workOrders.filter(wo => {
-          const statusMatch = status === 'All' || wo.status === status;
-          const stationMatch = station === 'All' || wo.part === station;
-          return statusMatch && stationMatch;
+      if (type === 'status') {
+        currentStatus = value;
+        document.querySelectorAll('[data-type="status"]').forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-pressed', 'false');
         });
+        btn.classList.add('active');
+        btn.setAttribute('aria-pressed', 'true');
+      } else if (type === 'station') {
+  currentStation = value.trim().toLowerCase();  // normalize filter value
+  document.querySelectorAll('[data-type="station"]').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-pressed', 'false');
+  });
+  btn.classList.add('active');
+  btn.setAttribute('aria-pressed', 'true');
+
+      } else if (type === 'urgent') {
+        showUrgentOnly = !showUrgentOnly;
+        btn.classList.toggle('active');
+        btn.setAttribute('aria-pressed', showUrgentOnly ? 'true' : 'false');
       }
-
-      function renderCalendar() {
-        if (calendar) {
-          calendar.destroy();
-        }
-
-        calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: 'dayGridMonth',
-          height: 'auto',
-          events: filterWorkOrders().map(wo => ({
-            id: wo.id,
-            title: wo.title,
-            start: wo.date,
-            extendedProps: {
-              desc: wo.desc,
-              part: wo.part,
-              operator: wo.operator,
-              status: wo.status,
-              urgent: wo.urgent || false,
-            },
-            classNames: wo.urgent ? ['urgent-event'] : [],
-          })),
-          eventClick: function(info) {
-            const wo = workOrders.find(w => w.id === info.event.id);
-            if (!wo) return;
-
-            currentEvent = wo;
-            fillForm(wo);
-            chatPanel.style.display = 'flex';
-            loadChat(wo.id);
-            modal.style.display = 'flex';
-          }
-        });
-
-        calendar.render();
-      }
-
-      function fillForm(wo) {
-        form.orderTitle.value = wo.title;
-        form.orderDesc.value = wo.desc;
-        form.orderDate.value = wo.date;
-        form.orderPart.value = wo.part;
-        form.orderOperator.value = wo.operator;
-        form.orderStatus.value = wo.status;
-        form.orderUrgent.checked = wo.urgent || false; // *** Added
-      }
-
-      function clearForm() {
-        form.reset();
-        form.orderUrgent.checked = false; // *** Added
-      }
-
-      function loadChat(orderId) {
-        chatMessages.innerHTML = '';
-        if (chatData[orderId]) {
-          chatData[orderId].forEach(msg => {
-            addChatMessage(msg.sender, msg.text, msg.timestamp);
-          });
-        }
-      }
-
-      function addChatMessage(sender, text, timestamp) {
-        const msgDiv = document.createElement('div');
-        msgDiv.className = 'chat-message';
-        msgDiv.innerHTML = `<div class="meta">${sender} - ${new Date(timestamp).toLocaleString()}</div>${text}`;
-        chatMessages.appendChild(msgDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }
-
-      // Enable send button only if text entered
-      chatInput.addEventListener('input', () => {
-        sendChatBtn.disabled = chatInput.value.trim().length === 0;
-      });
-
-      sendChatBtn.addEventListener('click', () => {
-        if (!currentEvent) return;
-
-        const msgText = chatInput.value.trim();
-        if (!msgText) return;
-
-        if (!chatData[currentEvent.id]) {
-          chatData[currentEvent.id] = [];
-        }
-        const newMsg = {
-          sender: 'User',
-          text: msgText,
-          timestamp: new Date().toISOString(),
-        };
-        chatData[currentEvent.id].push(newMsg);
-        saveChatData();
-        addChatMessage(newMsg.sender, newMsg.text, newMsg.timestamp);
-        chatInput.value = '';
-        sendChatBtn.disabled = true;
-      });
-
-      addOrderBtn.addEventListener('click', () => {
-        currentEvent = null;
-        clearForm();
-        chatPanel.style.display = 'none';
-        modal.style.display = 'flex';
-      });
-
-      cancelBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-      });
-
-      form.addEventListener('submit', e => {
-        e.preventDefault();
-
-        const newOrder = {
-          id: currentEvent ? currentEvent.id : `wo_${Date.now()}`,
-          title: form.orderTitle.value,
-          desc: form.orderDesc.value,
-          date: form.orderDate.value,
-          part: form.orderPart.value,
-          operator: form.orderOperator.value,
-          status: form.orderStatus.value,
-          urgent: form.orderUrgent.checked, // *** Added urgent
-        };
-
-        if (currentEvent) {
-          // Update existing
-          const idx = workOrders.findIndex(w => w.id === currentEvent.id);
-          if (idx !== -1) {
-            workOrders[idx] = newOrder;
-          }
-        } else {
-          // Add new
-          workOrders.push(newOrder);
-          // Alert check immediately for new urgent or close due wo
-          if (newOrder.urgent || (new Date(newOrder.date) - new Date()) <= 2 * 60 * 60 * 1000) {
-            checkAlerts();
-          }
-        }
-
-        saveWorkOrders();
-        // Show alert on creation with countdown
-if (!currentEvent) {
-  const timeLeft = formatTimeDifference(new Date(newOrder.date) - new Date());
-  showAlert(`✅ Work Order "${newOrder.title}" created. Time until due: ${timeLeft}.`);
-}
-
+      if(currentView === 'calendar') {
         renderCalendar();
-        if (currentEvent && currentEvent.status !== 'Done' && newOrder.status === 'Done') {
-  showAlert(`🎉 Work Order "${newOrder.title}" marked as DONE!`);
-}
-        modal.style.display = 'none';
-      });
-
-      statusFilter.addEventListener('change', renderCalendar);
-      stationFilter.addEventListener('change', renderCalendar);
-
-      // Initial render
-      renderCalendar();
+      } else {
+        renderTableView();
+      }
     });
-   loadRecurringLastAdded();
-addRecurringTasks();
-setInterval(addRecurringTasks, RECURRING_INTERVAL_MS);
+  });
+
+  // === Save & load ===
+  function saveWorkOrders() {
+    localStorage.setItem('workOrders', JSON.stringify(workOrders));
+  }
+  function saveChatData() {
+    localStorage.setItem('chatData', JSON.stringify(chatData));
+  }
+
+  // === Filter workOrders by current filters ===
+  // Filtering now happens on expanded orders below
+
+  // === Render table view function ===
+  function renderTableView() {
+    tableViewContainer.style.display = 'block';
+    calendarEl.style.display = 'none';
+    calendarViewBtn.disabled = false;
+    tableViewBtn.disabled = true;
+
+    // Use expanded orders with overridden occurrence statuses
+    let expandedOrders = getExpandedWorkOrders();
+
+let filteredOrders = expandedOrders.filter(wo => matchesFilter(wo));
+
+    filteredOrders.sort((a,b) => 
+      sortAscending
+        ? new Date(a.date) - new Date(b.date)
+        : new Date(b.date) - new Date(a.date)
+    );
+
+    workOrdersTableBody.innerHTML = '';
+
+    filteredOrders.forEach(wo => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${escapeHtml(wo.title)}</td>
+        <td>${escapeHtml(wo.desc)}</td>
+        <td>${wo.date}</td>
+        <td>${escapeHtml(wo.part)}</td>
+        <td>${escapeHtml(wo.operator)}</td>
+        <td>${escapeHtml(wo.status)}</td>
+        <td>${wo.urgent ? 'Yes' : 'No'}</td>
+        <td>${wo.isRecurring ? 'Yes' : 'No'}</td>
+      `;
+      row.style.cursor = 'pointer';
+      row.addEventListener('click', () => {
+        const event = calendar.getEventById(wo.id);
+        openModal(event || null);
+      });
+      workOrdersTableBody.appendChild(row);
+    });
+  }
+
+  // === View toggle buttons handlers ===
+  calendarViewBtn.addEventListener('click', () => {
+    currentView = 'calendar';
+    calendarEl.style.display = 'block';
+    tableViewContainer.style.display = 'none';
+    calendarViewBtn.disabled = true;
+    tableViewBtn.disabled = false;
+    renderCalendar();
+  });
+
+  tableViewBtn.addEventListener('click', () => {
+    currentView = 'table';
+    renderTableView();
+  });
+
+  // === Sort table by clicking date header ===
+  dateHeader.addEventListener('click', () => {
+    sortAscending = !sortAscending;
+    if (currentView === 'table') renderTableView();
+  });
+
+  // === Recurrence toggle logic ===
+  function toggleRecurrenceFields() {
+    if (orderRecurringCheckbox.checked) {
+      recurrenceSettings.style.display = 'block';
+      recurrenceEndDateContainer.style.display = 'block';
+    } else {
+      recurrenceSettings.style.display = 'none';
+      recurrenceEndDateContainer.style.display = 'none';
+      document.getElementById('orderFrequency').value = 'none';
+      document.getElementById('orderRecurrenceEndDate').value = '';
+    }
+  }
+  orderRecurringCheckbox.addEventListener('change', toggleRecurrenceFields);
+  toggleRecurrenceFields(); // initialize on load
+
+  // === Calendar and modal ===
+  const addOrderBtn = document.getElementById('addOrderBtn');
+  const clearCalendarBtn = document.getElementById('clearCalendarBtn');
+
+  const modal = document.getElementById('orderModal');
+  const form = document.getElementById('workOrderForm');
+  const saveBtn = document.getElementById('saveBtn');
+  const cancelBtn = document.getElementById('cancelBtn');
+  const deleteBtn = document.getElementById('deleteBtn');
+
+  const chatPanel = document.getElementById('chatPanel');
+  const chatMessages = document.getElementById('chatMessages');
+  const chatInput = document.getElementById('chatInput');
+  const sendChatBtn = document.getElementById('sendChatBtn');
+
+  let currentEvent = null; // currently editing event
+
+  // Initialize calendar
+  let calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    selectable: true,
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay'
+    },
+    eventDidMount: (info) => {
+      if (info.event.extendedProps.urgent) {
+        info.el.classList.add('urgent-event');
+      }
+    },
+    events: [],
+    eventClick: (info) => {
+      openModal(info.event);
+    },
+    select: (selectionInfo) => {
+      openModal(null, selectionInfo.startStr);
+    }
+  });
+  calendar.render();
+
+  // Open modal - if event is null, means new event, else edit
+  function openModal(event = null, selectedDate = null) {
+    currentEvent = event;
+    form.reset();
+    deleteBtn.style.display = 'none';
+    chatPanel.style.display = 'none';
+    chatMessages.innerHTML = '';
+    chatInput.value = '';
+    sendChatBtn.disabled = true;
+
+    if (event) {
+      // Edit mode
+      document.getElementById('modalTitle').textContent = 'Edit Work Order';
+      form.orderTitle.value = event.title;
+      form.orderDesc.value = event.extendedProps.desc || '';
+      form.orderDate.value = event.startStr.slice(0,10);
+      form.orderPart.value = event.extendedProps.part || 'Other';
+      form.orderOperator.value = event.extendedProps.operator || '';
+      form.orderStatus.value = event.extendedProps.status || 'To Do';
+      form.orderUrgent.checked = event.extendedProps.urgent || false;
+
+      // Recurrence fields populate
+      form.orderRecurring.checked = event.extendedProps.isRecurring || false;
+      form.orderFrequency.value = event.extendedProps.frequency || 'none';
+      form.orderRecurrenceEndDate.value = event.extendedProps.recurrenceEndDate || '';
+      toggleRecurrenceFields();
+
+      deleteBtn.style.display = 'inline-block';
+
+      // Load chat for this event
+      const eventId = event.extendedProps.id;
+      if (eventId && chatData[eventId]) {
+        renderChatMessages(eventId);
+        chatPanel.style.display = 'flex';
+        chatInput.focus();
+      }
+    } else {
+      // New mode
+      document.getElementById('modalTitle').textContent = 'Add Work Order';
+      if (selectedDate) {
+        form.orderDate.value = selectedDate;
+      } else {
+        form.orderDate.value = new Date().toISOString().slice(0,10);
+      }
+      form.orderRecurring.checked = false;
+      toggleRecurrenceFields();
+    }
+
+    modal.style.display = 'flex';
+    form.orderTitle.focus();
+  }
+
+  // Close modal
+  function closeModal() {
+    modal.style.display = 'none';
+    currentEvent = null;
+  }
+
+  // Save form with recurrence validation and save
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    // Validate recurrence fields if recurring checked
+    if (form.orderRecurring.checked) {
+      const freq = form.orderFrequency.value;
+      const endDate = form.orderRecurrenceEndDate.value;
+      const startDate = form.orderDate.value;
+
+      if (freq === 'none') {
+        alert('Please select a recurrence frequency.');
+        return;
+      }
+      if (!endDate) {
+        alert('Please select a recurrence end date.');
+        return;
+      }
+      if (new Date(endDate) <= new Date(startDate)) {
+        alert('Recurrence end date must be after the task date.');
+        return;
+      }
+    }
+
+    const order = {
+      id: currentEvent ? currentEvent.extendedProps.id : `wo-${Date.now()}`,
+      title: form.orderTitle.value.trim(),
+      desc: form.orderDesc.value.trim(),
+      date: form.orderDate.value,
+      part: form.orderPart.value,
+      operator: form.orderOperator.value,
+      status: form.orderStatus.value,
+      urgent: form.orderUrgent.checked,
+
+      isRecurring: form.orderRecurring.checked,
+      frequency: form.orderRecurring.checked ? form.orderFrequency.value : 'none',
+      recurrenceEndDate: form.orderRecurring.checked ? form.orderRecurrenceEndDate.value : ''
+    };
+
+    // Detect if editing an occurrence (id contains date suffix and NOT base order id)
+    const isOccurrence = currentEvent && currentEvent.extendedProps.id.includes('-') && !workOrders.some(w => w.id === currentEvent.extendedProps.id);
+
+    if (currentEvent) {
+      if (isOccurrence) {
+        // Update only occurrence status
+        occurrenceStatus[order.id] = order.status;
+        saveOccurrenceStatus();
+      } else {
+        // Update base task
+        const idx = workOrders.findIndex(w => w.id === order.id);
+        if (idx !== -1) {
+          workOrders[idx] = order;
+          saveWorkOrders();
+        }
+      }
+    } else {
+      // New task
+      workOrders.push(order);
+      saveWorkOrders();
+    }
+
+    if (currentView === 'calendar') {
+      renderCalendar();
+    } else {
+      renderTableView();
+    }
+    closeModal();
+  });
+
+  // Cancel button
+  cancelBtn.addEventListener('click', () => {
+    closeModal();
+  });
+
+  // Delete button
+  deleteBtn.addEventListener('click', () => {
+    if (currentEvent) {
+      const idToDelete = currentEvent.extendedProps.id;
+      const isOccurrence = !workOrders.some(w => w.id === idToDelete);
+
+      if (isOccurrence) {
+        // Delete occurrence status only
+        delete occurrenceStatus[idToDelete];
+        saveOccurrenceStatus();
+      } else {
+        // Delete full base task
+        workOrders = workOrders.filter(w => w.id !== idToDelete);
+        saveWorkOrders();
+      }
+
+      delete chatData[idToDelete];
+      saveChatData();
+
+      if(currentView === 'calendar') {
+        renderCalendar();
+      } else {
+        renderTableView();
+      }
+      closeModal();
+    }
+  });
+
+  // Add order button
+  addOrderBtn.addEventListener('click', () => openModal());
+
+  // Clear calendar button
+  clearCalendarBtn.addEventListener('click', () => {
+    if (confirm('Are you sure you want to clear all work orders? This action cannot be undone.')) {
+      workOrders = [];
+      chatData = {};
+      occurrenceStatus = {};
+      saveWorkOrders();
+      saveChatData();
+      saveOccurrenceStatus();
+      if(currentView === 'calendar') {
+        renderCalendar();
+      } else {
+        renderTableView();
+      }
+    }
+  });
+
+  // Chat functionality
+  chatInput.addEventListener('input', () => {
+    sendChatBtn.disabled = chatInput.value.trim() === '';
+  });
+
+  sendChatBtn.addEventListener('click', () => {
+    const msg = chatInput.value.trim();
+    if (!msg) return;
+
+    const eventId = currentEvent.extendedProps.id;
+    if (!chatData[eventId]) {
+      chatData[eventId] = [];
+    }
+    const now = new Date().toISOString();
+    chatData[eventId].push({ message: msg, timestamp: now });
+    saveChatData();
+    renderChatMessages(eventId);
+    chatInput.value = '';
+    sendChatBtn.disabled = true;
+    chatInput.focus();
+  });
+
+  function renderChatMessages(eventId) {
+    const msgs = chatData[eventId] || [];
+    chatMessages.innerHTML = '';
+    msgs.forEach(chat => {
+      const div = document.createElement('div');
+      div.className = 'chat-message';
+      const time = new Date(chat.timestamp).toLocaleString();
+      div.innerHTML = `<div class="meta">${time}</div><div>${escapeHtml(chat.message)}</div>`;
+      chatMessages.appendChild(div);
+    });
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  // Escape HTML to avoid injection
+  function escapeHtml(text) {
+    return text.replace(/[&<>"']/g, function(m) {
+      return ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[m]);
+    });
+  }
+
+  // Expand recurring tasks into multiple calendar events based on frequency and end date
+  function getExpandedWorkOrders() {
+    const expanded = [];
+
+    workOrders.forEach(order => {
+      if (order.isRecurring && order.frequency !== 'none' && order.recurrenceEndDate) {
+        const freq = order.frequency;
+        const startDate = new Date(order.date);
+        const endDate = new Date(order.recurrenceEndDate);
+
+        const baseOrder = { ...order };
+
+        let currentDate = new Date(startDate);
+
+        while (currentDate <= endDate) {
+          const dateStr = currentDate.toISOString().slice(0,10);
+          const occurrenceId = order.id + '-' + dateStr;
+
+          expanded.push({
+            ...baseOrder,
+            id: occurrenceId,
+            date: dateStr,
+            // OVERRIDE status with occurrenceStatus if exists, else use base order status
+            status: occurrenceStatus[occurrenceId] || order.status,
+          });
+
+          if (freq === 'daily') {
+            currentDate.setDate(currentDate.getDate() + 1);
+          } else if (freq === 'weekly') {
+            currentDate.setDate(currentDate.getDate() + 7);
+          } else if (freq === 'monthly') {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+          } else {
+            break;
+          }
+        }
+      } else {
+        expanded.push(order);
+      }
+    });
+
+    return expanded;
+  }
+
+  // Render calendar events filtered & expanded recurring
+  function renderCalendar() {
+  calendar.removeAllEvents();
+
+  let expandedOrders = getExpandedWorkOrders();
+
+  let filteredOrders = expandedOrders.filter(wo => matchesFilter(wo));
+
+  filteredOrders.forEach(order => {
+    calendar.addEvent({
+      id: order.id,
+      title: order.title,
+      start: order.date,
+      extendedProps: {
+        desc: order.desc,
+        part: order.part,
+        operator: order.operator,
+        status: order.status,
+        urgent: order.urgent,
+        id: order.id,
+        isRecurring: order.isRecurring,
+        frequency: order.frequency,
+        recurrenceEndDate: order.recurrenceEndDate
+      },
+      color: order.urgent ? '#e74c3c' : undefined
+    });
+  });
+}
 
 
-  </script>
+  // Initial render
+  renderCalendar();
+
+</script>
+
+
+
 </body>
 </html>
