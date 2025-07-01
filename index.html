@@ -789,6 +789,10 @@ body.dark-mode #viewToggleGroup button:hover:not(.active) {
   
 
 <div id="viewToggleGroup" aria-label="Toggle calendar or table view" role="group">
+  <div style="text-align:center; margin: 10px;">
+  <button id="exportPdfBtn">📄 Export Table to PDF</button>
+</div>
+
   <button id="calendarViewBtn" class="active" aria-pressed="true">
     📅 Calendar
   </button>
@@ -917,6 +921,8 @@ body.dark-mode #viewToggleGroup button:hover:not(.active) {
     <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
     <span id="alertText"></span>
   </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
 <script>
@@ -1486,6 +1492,45 @@ let filteredOrders = expandedOrders.filter(wo => matchesFilter(wo));
 
   // Initial render
   renderCalendar();
+document.getElementById('exportPdfBtn').addEventListener('click', () => {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  doc.setFontSize(16);
+  doc.text("Work Orders Table", 14, 20);
+
+  const headers = [["Title", "Description", "Date", "Part", "Operator", "Status", "Urgent", "Recurring"]];
+
+  const rows = [];
+  const expandedOrders = getExpandedWorkOrders().filter(wo => matchesFilter(wo));
+  expandedOrders.forEach(wo => {
+    rows.push([
+      wo.title,
+      wo.desc,
+      new Date(wo.date).toLocaleString(),
+      wo.part,
+      wo.operator,
+      wo.status,
+      wo.urgent ? "Yes" : "No",
+      wo.isRecurring ? "Yes" : "No"
+    ]);
+  });
+
+  doc.autoTable({
+    head: headers,
+    body: rows,
+    startY: 30,
+    styles: {
+      fontSize: 10,
+      cellPadding: 2
+    },
+    headStyles: {
+      fillColor: [74, 144, 226]  // blue header
+    }
+  });
+
+  doc.save("WorkOrders.pdf");
+});
 
 </script>
 

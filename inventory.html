@@ -7,197 +7,291 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background: #f9f9f9;
-      color: #333;
-    }
+   body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: #f9f9f9;
+  color: #333;
+}
 
-    .sidebar {
-      position: fixed;
-      left: 0;
-      top: 0;
-      height: 100vh;
-      width: 100px;
-      background-color: #2f3e4e;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 0;
-      box-shadow: 2px 0 8px rgba(0,0,0,0.15);
-    }
-    .sidebar #image {
-      width: 100%;
-      height: auto;
-      object-fit: cover;
-      margin: 0;
-      padding-bottom: 120px;
-      display: block;
-    }
-    .nav-item {
-      color: #a9b3c1;
-      text-align: center;
-      margin: 20px 0;
-      cursor: pointer;
-      width: 70px;
-      transition: color 0.3s ease, background-color 0.3s ease;
-      border-radius: 12px;
-      padding: 10px 0;
-    }
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 100px;
+  background-color: #2f3e4e;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+}
+.sidebar #image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  margin: 0;
+  padding-bottom: 120px;
+  display: block;
+}
+.nav-item {
+  color: #a9b3c1;
+  text-align: center;
+  margin: 20px 0;
+  cursor: pointer;
+  width: 70px;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  border-radius: 12px;
+  padding: 10px 0;
+}
+.nav-item.active,
+.nav-item:hover {
+  background: #3a9bdc;
+  color: white;
+}
 
-    .nav-item.active,
-    .nav-item:hover {
-      background: #3a9bdc;
-      color: white;
-    }
+/* Dark Mode Toggle */
+#darkModeToggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 999;
+  background: #f0f0f0;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+  color: black;
+}
+#darkModeToggle:hover {
+  background-color: #ddd;
+}
 
-    /* Dark mode toggle button */
-    #darkModeToggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 999;
-      background: #f0f0f0;
-      border: none;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      font-size: 20px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.3s;
-      color: black;
-    }
-    #darkModeToggle:hover {
-      background-color: #ddd;
-    }
+/* Main Content */
+.main-content {
+  margin-left: 200px;
+  padding: 20px;
+}
+h1 {
+  margin-top: 0;
+}
 
-    /* Main content area */
-    .main-content {
-      margin-left: 200px;
-      padding: 20px;
-    }
+/* Station Form */
+#stationForm {
+  margin-bottom: 30px;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+}
+#stationForm label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+#stationForm input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+  font-size: 1em;
+}
+#stationForm button {
+  padding: 10px 16px;
+  background: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1em;
+}
+#stationForm button:hover {
+  background: #357abd;
+}
 
-    h1 {
-      margin-top: 0;
-    }
+/* Stations Table - Light Mode */
+#stationsTable {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+  font-size: 15px;
+}
 
-    /* Station Creation Form */
-    #stationForm {
-      margin-bottom: 30px;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      max-width: 600px;
-    }
-    #stationForm label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-    #stationForm input[type="text"] {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 12px;
-      border: 1.5px solid #ccc;
-      border-radius: 6px;
-      font-size: 1em;
-    }
-    #stationForm button {
-      padding: 10px 16px;
-      background: #4a90e2;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 1em;
-    }
-    #stationForm button:hover {
-      background: #357ABD;
-    }
+#stationsTable thead th {
+  background-color: #007acc;
+  color: white;
+  font-weight: 600;
+  padding: 16px;
+  text-align: center;
+  text-transform: uppercase;
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+}
+#stationsTable thead th:last-child {
+  border-right: none;
+}
 
-    /* Station parts table */
-    #stationsTable {
-      width: 100%;
-      max-width: 800px;
-      border-collapse: collapse;
-      background: white;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    #stationsTable th, #stationsTable td {
-      padding: 12px 15px;
-      border-bottom: 1px solid #ddd;
-      text-align: left;
-    }
-    #stationsTable th {
-      background: #4a90e2;
-      color: white;
-      font-weight: 600;
-    }
-    #stationsTable input[type="number"] {
-      width: 80px;
-      padding: 6px;
-      font-size: 1em;
-      border: 1.5px solid #ccc;
-      border-radius: 6px;
-    }
+#stationsTable td {
+  padding: 14px 16px;
+  border-top: 1px solid #eee;
+  border-right: 1px solid #f0f0f0;
+  vertical-align: middle;
+}
+#stationsTable td:last-child {
+  border-right: none;
+}
 
-    /* DARK MODE STYLES */
-    body.dark-mode {
-      background-color: #121212;
-      color: #f0f0f0;
-    }
-    body.dark-mode .sidebar {
-      background-color: #1a1a1a;
-      color: #ccc;
-    }
-    body.dark-mode .nav-item {
-      color: #bbb;
-    }
-    body.dark-mode .nav-item.active,
-    body.dark-mode .nav-item:hover {
-      background-color: #3a9bdc;
-      color: #fff;
-    }
-    body.dark-mode #darkModeToggle {
-      background-color: #333;
-      color: #f0f0f0;
-    }
-    body.dark-mode #darkModeToggle:hover {
-      background-color: #555;
-    }
-    body.dark-mode #stationForm,
-    body.dark-mode #stationsTable {
-      background-color: #1e1e1e;
-      box-shadow: 0 0 10px rgba(0,0,0,0.7);
-    }
-    body.dark-mode #stationsTable th, 
-    body.dark-mode #stationsTable td {
-      border-color: #444;
-    }
-    body.dark-mode #stationForm input[type="text"],
-    body.dark-mode #stationsTable input[type="number"] {
-      background-color: #2c2c2c;
-      border-color: #555;
-      color: #eee;
-    }
-    body.dark-mode #stationForm button {
-      background-color: #3a9bdc;
-      color: white;
-    }
-    body.dark-mode #stationForm button:hover {
-      background-color: #5aa0ee;
-    }
+#stationsTable tbody tr:hover {
+  background-color: #f9fbfd;
+}
+
+.part-group-end td {
+  border-bottom: 2px solid #999 !important;
+}
+
+#stationsTable input[type="text"],
+#stationsTable input[type="number"] {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95em;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+/* Delete Button */
+button.delete-btn {
+  background-color: #e74c3c;
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
+}
+button.delete-btn:hover {
+  background-color: #c0392b;
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+  background-color: #121212;
+  color: #f0f0f0;
+}
+body.dark-mode .sidebar {
+  background-color: #1a1a1a;
+  color: #ccc;
+}
+body.dark-mode .nav-item {
+  color: #bbb;
+}
+body.dark-mode .nav-item.active,
+body.dark-mode .nav-item:hover {
+  background-color: #3a9bdc;
+  color: #fff;
+}
+body.dark-mode #darkModeToggle {
+  background-color: #333;
+  color: #f0f0f0;
+}
+body.dark-mode #darkModeToggle:hover {
+  background-color: #555;
+}
+body.dark-mode #stationForm,
+body.dark-mode #stationsTable {
+  background-color: #1e1e1e;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+}
+body.dark-mode #stationForm input[type="text"],
+body.dark-mode #stationsTable input[type="number"],
+body.dark-mode #stationsTable input[type="text"] {
+  background-color: #2c2c2c;
+  border-color: #555;
+  color: #eee;
+}
+body.dark-mode #stationForm button {
+  background-color: #3a9bdc;
+  color: white;
+}
+body.dark-mode #stationForm button:hover {
+  background-color: #5aa0ee;
+}
+body.dark-mode #stationsTable thead th {
+  background-color: #3a9bdc;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+body.dark-mode #stationsTable td {
+  background-color: #1e1e1e;
+  border-top: 1px solid #333;
+  border-right: 1px solid #2c2c2c;
+}
+body.dark-mode .part-group-end td {
+  border-bottom: 2px solid #666 !important;
+}
+/* Custom Alert Styling */
+.custom-alert {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  background-color: red;
+  color: black;
+  border: 1px solid #f0c36d;
+  padding: 16px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  cursor: pointer;
+  max-width: 90%;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  text-align: center;
+}
+
+.custom-alert::after {
+  content: '✖';
+  
+  top: 8px;
+  right: 12px;
+  color: #8a6d3b;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 4px;
+  border-radius: 4px;
+  padding-left: 10px;
+  transition: transform 0.2s ease;
+}
+
+.custom-alert:hover::after {
+  transform: scale(1.2);
+}
+
+
+
+
+
+
   </style>
 </head>
 <body>
+  <div id="customAlert" class="custom-alert" style="display: none;"></div>
 
   <!-- Sidebar -->
   <div class="sidebar">
@@ -230,221 +324,341 @@
 
     <!-- Station creation form -->
     <form id="stationForm">
+      <button id="exportPdfBtn" style="margin-bottom: 20px;">Export Table to PDF</button>
+
       <label for="stationNameInput">Add New Station</label>
       <input type="text" id="stationNameInput" placeholder="Station name" required />
       <button type="submit">Add Station</button>
     </form>
 
     <!-- Stations parts table -->
-    <table id="stationsTable" aria-label="Stations parts and quantities">
-      <thead>
-        <tr>
-          <th>Station Name</th>
-          <th>Part</th>
-          <th>Quantity</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- dynamically generated rows here -->
-      </tbody>
-    </table>
-  </div>
+
+  <table id="stationsTable" aria-label="Stations parts and quantities">
+    <thead>
+      <tr>
+        <th>Station Name</th>
+        <th>Part</th>
+        <th>Quantity</th>
+        <th>Unit</th>
+        <th>Min Quantity</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- dynamically generated rows here -->
+    </tbody>
+  </table>
+</div>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 
   <script>
-    // Dark mode toggle logic
-    const darkToggle = document.getElementById('darkModeToggle');
-    const darkIcon = darkToggle.querySelector('i');
+    document.getElementById("exportPdfBtn").addEventListener("click", function () {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
 
-    function updateDarkModeButton() {
-      if (document.body.classList.contains('dark-mode')) {
-        darkIcon.className = 'fas fa-moon';
-        darkToggle.style.background = '#333';
-        darkToggle.style.color = '#f0f0f0';
-        darkToggle.title = "Switch to Light Mode";
+  // Collect table headers
+  const headers = [
+    ["Station Name", "Part", "Quantity", "Unit", "Min Quantity", "Actions"]
+  ];
+
+  // Collect table data
+  const data = [];
+
+  document.querySelectorAll("#stationsTable tbody tr").forEach(row => {
+    const rowData = [];
+    row.querySelectorAll("td").forEach((cell, index) => {
+      // Handle input values
+      const input = cell.querySelector("input");
+      if (input) {
+        rowData.push(input.value || "-");
       } else {
-        darkIcon.className = 'fas fa-sun';
-        darkToggle.style.background = '#f0f0f0';
-        darkToggle.style.color = '#000';
-        darkToggle.title = "Switch to Dark Mode";
+        rowData.push(cell.textContent.trim() || "-");
       }
-    }
-
-    darkToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark-mode');
-      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-      updateDarkModeButton();
     });
 
-    if (localStorage.getItem('darkMode') === 'true') {
-      document.body.classList.add('dark-mode');
+    // Only push full rows with at least one value
+    if (rowData.length > 0) {
+      data.push(rowData);
     }
+  });
+
+  doc.text("Inventory Table", 14, 16);
+  doc.autoTable({
+    startY: 20,
+    head: headers,
+    body: data,
+    styles: { fontSize: 9 },
+    headStyles: { fillColor: [58, 155, 220] }
+  });
+
+  doc.save("stations_inventory.pdf");
+});
+
+  const darkToggle = document.getElementById('darkModeToggle');
+  const darkIcon = darkToggle.querySelector('i');
+
+  function updateDarkModeButton() {
+    if (document.body.classList.contains('dark-mode')) {
+      darkIcon.className = 'fas fa-moon';
+      darkToggle.style.background = '#333';
+      darkToggle.style.color = '#f0f0f0';
+      darkToggle.title = "Switch to Light Mode";
+    } else {
+      darkIcon.className = 'fas fa-sun';
+      darkToggle.style.background = '#f0f0f0';
+      darkToggle.style.color = '#000';
+      darkToggle.title = "Switch to Dark Mode";
+    }
+  }
+
+  darkToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
     updateDarkModeButton();
+  });
 
+  if (localStorage.getItem('darkMode') === 'true') {
+    document.body.classList.add('dark-mode');
+  }
+  updateDarkModeButton();
 
-    // Navigation active class logic
-    const currentPage = window.location.pathname.split("/").pop();
-    const navItems = document.querySelectorAll(".nav-item");
-    navItems.forEach(item => {
-      const href = item.getAttribute("href");
-      if (href === currentPage) {
-        item.classList.add("active");
-      } else {
-        item.classList.remove("active");
-      }
-    });
+  const currentPage = window.location.pathname.split("/").pop();
+  const navItems = document.querySelectorAll(".nav-item");
+  navItems.forEach(item => {
+    const href = item.getAttribute("href");
+    if (href === currentPage) {
+      item.classList.add("active");
+    } else {
+      item.classList.remove("active");
+    }
+  });
 
+  // ========================
+  // Inventory logic
+  // ========================
 
-    // Station and parts logic
+  let stations = JSON.parse(localStorage.getItem("stationsInventory")) || [];
 
-    // Data format example: 
-    // stations = [{name: "Station A", parts: [{part: "Part 1", quantity: 3}, {part:"Part 2", quantity:0}]}]
-    let stations = JSON.parse(localStorage.getItem("stationsInventory")) || [];
+  const stationForm = document.getElementById("stationForm");
+  const stationNameInput = document.getElementById("stationNameInput");
+  const stationsTableBody = document.querySelector("#stationsTable tbody");
+  function showCustomAlert(message) {
+  const alertBox = document.getElementById("customAlert");
+  alertBox.innerHTML = message;
+  alertBox.style.display = "block";
 
-    const stationForm = document.getElementById("stationForm");
-    const stationNameInput = document.getElementById("stationNameInput");
-    const stationsTableBody = document.querySelector("#stationsTable tbody");
+  alertBox.onclick = () => {
+    alertBox.style.display = "none";
+  };
 
-    // Render stations table with parts and quantity inputs
-    function renderStationsTable() {
-      stationsTableBody.innerHTML = "";
+  setTimeout(() => {
+    alertBox.style.display = "none";
+  }, 6000);
+}
 
-      stations.forEach((station, stationIdx) => {
-        if (!station.parts || station.parts.length === 0) {
-          // If no parts, show station with empty part & quantity input row for adding parts
-          const tr = document.createElement("tr");
+  function renderStationsTable() {
+  stationsTableBody.innerHTML = "";
 
-          const tdStationName = document.createElement("td");
-          tdStationName.textContent = station.name;
-          tr.appendChild(tdStationName);
+  stations.forEach((station, stationIdx) => {
+    if (!station.parts || station.parts.length === 0) {
+      const tr = document.createElement("tr");
 
-          const tdPart = document.createElement("td");
-          const partInput = document.createElement("input");
-          partInput.type = "text";
-          partInput.placeholder = "Add part name...";
-          partInput.addEventListener("keydown", (e) => {
-            if (e.key === "Enter" && partInput.value.trim()) {
-              addPartToStation(stationIdx, partInput.value.trim());
-              partInput.value = "";
-              e.preventDefault();
-            }
-          });
-          tdPart.appendChild(partInput);
-          tr.appendChild(tdPart);
+      const tdStationName = document.createElement("td");
+      tdStationName.textContent = station.name;
+      tr.appendChild(tdStationName);
 
-          const tdQty = document.createElement("td");
-          tdQty.textContent = "-";
-          tr.appendChild(tdQty);
-
-          stationsTableBody.appendChild(tr);
-        } else {
-          // Render each part as a row with quantity input
-          station.parts.forEach((partObj, partIdx) => {
-            const tr = document.createElement("tr");
-
-            // Station name only on first part row for each station
-            const tdStationName = document.createElement("td");
-            if (partIdx === 0) {
-              tdStationName.textContent = station.name;
-              tdStationName.rowSpan = station.parts.length;
-            } else {
-              tdStationName.style.display = "none";
-            }
-            tr.appendChild(tdStationName);
-
-            // Part name (editable)
-            const tdPart = document.createElement("td");
-            const partInput = document.createElement("input");
-            partInput.type = "text";
-            partInput.value = partObj.part;
-            partInput.style.width = "90%";
-            partInput.addEventListener("change", () => {
-              stations[stationIdx].parts[partIdx].part = partInput.value.trim();
-              saveStations();
-              renderStationsTable();
-            });
-            tdPart.appendChild(partInput);
-            tr.appendChild(tdPart);
-
-            // Quantity input
-            const tdQty = document.createElement("td");
-            const qtyInput = document.createElement("input");
-            qtyInput.type = "number";
-            qtyInput.min = "0";
-            qtyInput.value = partObj.quantity;
-            qtyInput.addEventListener("change", () => {
-              stations[stationIdx].parts[partIdx].quantity = parseInt(qtyInput.value) || 0;
-              saveStations();
-            });
-            tdQty.appendChild(qtyInput);
-            tr.appendChild(tdQty);
-
-            stationsTableBody.appendChild(tr);
-          });
-
-          // Add new part input row below parts for this station
-          const trAddPart = document.createElement("tr");
-          const tdBlank = document.createElement("td");
-          tdBlank.textContent = "";
-          tdBlank.style.border = "none";
-          trAddPart.appendChild(tdBlank);
-
-          const tdNewPart = document.createElement("td");
-          const addPartInput = document.createElement("input");
-          addPartInput.type = "text";
-          addPartInput.placeholder = "Add new part...";
-          addPartInput.addEventListener("keydown", (e) => {
-            if (e.key === "Enter" && addPartInput.value.trim()) {
-              addPartToStation(stationIdx, addPartInput.value.trim());
-              addPartInput.value = "";
-              e.preventDefault();
-            }
-          });
-          tdNewPart.appendChild(addPartInput);
-          trAddPart.appendChild(tdNewPart);
-
-          const tdNewQty = document.createElement("td");
-          tdNewQty.textContent = "-";
-          trAddPart.appendChild(tdNewQty);
-
-          stationsTableBody.appendChild(trAddPart);
+      const tdPart = document.createElement("td");
+      const partInput = document.createElement("input");
+      partInput.type = "text";
+      partInput.placeholder = "Add part name...";
+      partInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && partInput.value.trim()) {
+          addPartToStation(stationIdx, partInput.value.trim());
+          partInput.value = "";
+          e.preventDefault();
         }
       });
+      tdPart.appendChild(partInput);
+      tr.appendChild(tdPart);
+
+      const tdQty = document.createElement("td");
+      tdQty.textContent = "-";
+      tr.appendChild(tdQty);
+
+      tr.appendChild(document.createElement("td")); // Unit
+      tr.appendChild(document.createElement("td")); // Min Qty
+
+      const tdDelete = document.createElement("td");
+      const deleteStationBtn = document.createElement("button");
+      deleteStationBtn.className = "delete-btn";
+      deleteStationBtn.textContent = "Delete Station";
+      deleteStationBtn.onclick = () => {
+        if (confirm(`Delete station "${station.name}"?`)) {
+          stations.splice(stationIdx, 1);
+          saveStations();
+          renderStationsTable();
+        }
+      };
+      tdDelete.appendChild(deleteStationBtn);
+      tr.appendChild(tdDelete);
+
+      stationsTableBody.appendChild(tr);
+    } else {
+      station.parts.forEach((partObj, partIdx) => {
+        const tr = document.createElement("tr");
+        tr.classList.add("part-row");
+
+        const tdStationName = document.createElement("td");
+        if (partIdx === 0) {
+          tdStationName.textContent = station.name;
+          tdStationName.rowSpan = station.parts.length + 1;
+        } else {
+          tdStationName.style.display = "none";
+        }
+        tr.appendChild(tdStationName);
+
+        const tdPart = document.createElement("td");
+        const partInput = document.createElement("input");
+        partInput.type = "text";
+        partInput.value = partObj.part;
+        partInput.addEventListener("change", () => {
+          stations[stationIdx].parts[partIdx].part = partInput.value.trim();
+          saveStations();
+        });
+        tdPart.appendChild(partInput);
+        tr.appendChild(tdPart);
+
+        const tdQty = document.createElement("td");
+        const qtyInput = document.createElement("input");
+        qtyInput.type = "number";
+        qtyInput.min = "0";
+        qtyInput.value = partObj.quantity || 0;
+        qtyInput.addEventListener("change", () => {
+          partObj.quantity = parseInt(qtyInput.value) || 0;
+          saveStations();
+          if (partObj.minQty !== undefined && partObj.quantity < partObj.minQty) {
+            showCustomAlert(`⚠️ <strong>${partObj.part}</strong> in <strong>${station.name}</strong> is below the minimum quantity (${partObj.minQty})!`);
+
+          }
+        });
+        tdQty.appendChild(qtyInput);
+        tr.appendChild(tdQty);
+
+        const tdUnit = document.createElement("td");
+        const unitInput = document.createElement("input");
+        unitInput.type = "text";
+        unitInput.value = partObj.unit || "";
+        unitInput.addEventListener("change", () => {
+          partObj.unit = unitInput.value.trim();
+          saveStations();
+        });
+        tdUnit.appendChild(unitInput);
+        tr.appendChild(tdUnit);
+
+        const tdMinQty = document.createElement("td");
+        const minQtyInput = document.createElement("input");
+        minQtyInput.type = "number";
+        minQtyInput.min = "0";
+        minQtyInput.value = partObj.minQty || 0;
+        minQtyInput.addEventListener("change", () => {
+          partObj.minQty = parseInt(minQtyInput.value) || 0;
+          saveStations();
+          if (partObj.quantity < partObj.minQty) {
+            showCustomAlert(`⚠️ <strong>${partObj.part}</strong> in <strong>${station.name}</strong> is below the minimum quantity (${partObj.minQty})!`);
+
+          }
+        });
+        tdMinQty.appendChild(minQtyInput);
+        tr.appendChild(tdMinQty);
+
+        const tdDelete = document.createElement("td");
+        const deletePartBtn = document.createElement("button");
+        deletePartBtn.className = "delete-btn";
+        deletePartBtn.textContent = "Delete";
+        deletePartBtn.onclick = () => {
+          if (confirm(`Delete part "${partObj.part}"?`)) {
+            stations[stationIdx].parts.splice(partIdx, 1);
+            saveStations();
+            renderStationsTable();
+          }
+        };
+        tdDelete.appendChild(deletePartBtn);
+        tr.appendChild(tdDelete);
+
+        stationsTableBody.appendChild(tr);
+      });
+
+      // Add new part row
+      const trAdd = document.createElement("tr");
+
+      const tdBlank = document.createElement("td");
+      tdBlank.textContent = "";
+      tdBlank.style.border = "none";
+      trAdd.appendChild(tdBlank);
+
+      const tdNewPart = document.createElement("td");
+      const addPartInput = document.createElement("input");
+      addPartInput.type = "text";
+      addPartInput.placeholder = "Add new part...";
+      addPartInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && addPartInput.value.trim()) {
+          addPartToStation(stationIdx, addPartInput.value.trim());
+          addPartInput.value = "";
+          e.preventDefault();
+        }
+      });
+      tdNewPart.appendChild(addPartInput);
+      trAdd.appendChild(tdNewPart);
+
+      const tdDash1 = document.createElement("td");
+      tdDash1.textContent = "-";
+      trAdd.appendChild(tdDash1);
+
+      trAdd.appendChild(document.createElement("td")); // Unit
+      trAdd.appendChild(document.createElement("td")); // Min Qty
+      trAdd.appendChild(document.createElement("td")); // Empty Actions
+
+      stationsTableBody.appendChild(trAdd);
+      trAdd.classList.add("part-group-end");
+
     }
+  });
+}
 
-    function addPartToStation(stationIndex, partName) {
-      if (!stations[stationIndex].parts) {
-        stations[stationIndex].parts = [];
-      }
-      stations[stationIndex].parts.push({ part: partName, quantity: 0 });
-      saveStations();
-      renderStationsTable();
+  function addPartToStation(stationIndex, partName) {
+    if (!stations[stationIndex].parts) {
+      stations[stationIndex].parts = [];
     }
-
-    function saveStations() {
-      localStorage.setItem("stationsInventory", JSON.stringify(stations));
-    }
-
-    // Handle new station form submission
-    stationForm.addEventListener("submit", e => {
-      e.preventDefault();
-      const stationName = stationNameInput.value.trim();
-      if (!stationName) return alert("Please enter a station name.");
-
-      // Check if station already exists
-      const exists = stations.some(s => s.name.toLowerCase() === stationName.toLowerCase());
-      if (exists) {
-        alert("Station already exists.");
-        return;
-      }
-
-      stations.push({ name: stationName, parts: [] });
-      saveStations();
-      renderStationsTable();
-      stationNameInput.value = "";
-    });
-
-    // Initial render
+    stations[stationIndex].parts.push({ part: partName, quantity: 0, unit: "", minQty: 0 });
+    saveStations();
     renderStationsTable();
-  </script>
+  }
+
+  function saveStations() {
+    localStorage.setItem("stationsInventory", JSON.stringify(stations));
+  }
+
+  stationForm.addEventListener("submit", e => {
+    e.preventDefault();
+    const stationName = stationNameInput.value.trim();
+    if (!stationName) return showCustomAlert("⚠️ Please enter a station name.");
+
+    const exists = stations.some(s => s.name.toLowerCase() === stationName.toLowerCase());
+    if (exists) {
+showCustomAlert("⚠️ Station already exists.");
+      return;
+    }
+    stations.push({ name: stationName, parts: [] });
+    saveStations();
+    renderStationsTable();
+    stationNameInput.value = "";
+  });
+
+  renderStationsTable();
+</script>
+
 </body>
 </html>

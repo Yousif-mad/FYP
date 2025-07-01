@@ -293,6 +293,9 @@ body.dark-mode .modal {
       <h2>Stations</h2>
       <ul id="stationsUl"></ul>
     </div>
+    <button id="exportAssetsBtn" style="margin-bottom: 10px; padding: 8px 12px; background: #3a9bdc; color: white; border: none; border-radius: 6px; cursor: pointer;">
+  <i class="fas fa-file-pdf"></i> Export to PDF
+</button>
     <div id="stationTableContainer">
       <p id="noSelectionMsg">Select a station to see its details.</p>
     </div>
@@ -315,6 +318,8 @@ body.dark-mode .modal {
       </form>
     </div>
   </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
 <script>
   // 🌗 Dark Mode Toggle Logic
@@ -825,6 +830,48 @@ tr.appendChild(tdDate);
       item.classList.remove("active");
     }
   });
+  function setupExportAssetsBtn() {
+  const btn = document.getElementById("exportAssetsBtn");
+  if (!btn) return;
+
+  btn.addEventListener("click", () => {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const table = stationTableContainer.querySelector("table");
+
+    if (!table) {
+      alert("No table available for export.");
+      return;
+    }
+
+    const headers = [];
+    table.querySelectorAll("thead th").forEach(th => headers.push(th.textContent.trim()));
+
+    const body = [];
+    table.querySelectorAll("tbody tr").forEach(row => {
+      const rowData = [];
+      row.querySelectorAll("td").forEach(cell => {
+        rowData.push(cell.textContent.trim());
+      });
+      body.push(rowData);
+    });
+
+    doc.text("Assets & Hierarchy Table", 14, 16);
+    doc.autoTable({
+      head: [headers],
+      body: body,
+      startY: 20,
+      styles: { fontSize: 9 },
+      headStyles: { fillColor: [58, 155, 220] }
+    });
+
+    doc.save("assets_table.pdf");
+  });
+}
+
+// Initialize on load
+setupExportAssetsBtn();
+
 </script>
 
 </body>
