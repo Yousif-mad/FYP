@@ -834,8 +834,9 @@ body.dark-mode #viewToggleGroup button:hover:not(.active) {
   </div>
 
   <div class="form-group">
-    <label for="orderDate">Date</label>
-    <input type="date" id="orderDate" name="orderDate" required />
+    <label for="orderDateTime">Date & Time</label>
+    <input type="datetime-local" id="orderDateTime" name="orderDateTime" required />
+
   </div>
 
   <div class="form-group">
@@ -1092,7 +1093,7 @@ let filteredOrders = expandedOrders.filter(wo => matchesFilter(wo));
       row.innerHTML = `
         <td>${escapeHtml(wo.title)}</td>
         <td>${escapeHtml(wo.desc)}</td>
-        <td>${wo.date}</td>
+        <td>${new Date(wo.date).toLocaleString()}</td>
         <td>${escapeHtml(wo.part)}</td>
         <td>${escapeHtml(wo.operator)}</td>
         <td>${escapeHtml(wo.status)}</td>
@@ -1200,7 +1201,7 @@ let filteredOrders = expandedOrders.filter(wo => matchesFilter(wo));
       document.getElementById('modalTitle').textContent = 'Edit Work Order';
       form.orderTitle.value = event.title;
       form.orderDesc.value = event.extendedProps.desc || '';
-      form.orderDate.value = event.startStr.slice(0,10);
+      form.orderDateTime.value = event.startStr.slice(0,16);
       form.orderPart.value = event.extendedProps.part || 'Other';
       form.orderOperator.value = event.extendedProps.operator || '';
       form.orderStatus.value = event.extendedProps.status || 'To Do';
@@ -1225,9 +1226,11 @@ let filteredOrders = expandedOrders.filter(wo => matchesFilter(wo));
       // New mode
       document.getElementById('modalTitle').textContent = 'Add Work Order';
       if (selectedDate) {
-        form.orderDate.value = selectedDate;
+      form.orderDateTime.value = selectedDate.slice(0,16);
+
       } else {
-        form.orderDate.value = new Date().toISOString().slice(0,10);
+        form.orderDateTime.value = new Date().toISOString().slice(0,16);
+
       }
       form.orderRecurring.checked = false;
       toggleRecurrenceFields();
@@ -1251,7 +1254,7 @@ let filteredOrders = expandedOrders.filter(wo => matchesFilter(wo));
     if (form.orderRecurring.checked) {
       const freq = form.orderFrequency.value;
       const endDate = form.orderRecurrenceEndDate.value;
-      const startDate = form.orderDate.value;
+      const startDate = form.orderDateTime.value;
 
       if (freq === 'none') {
         alert('Please select a recurrence frequency.');
@@ -1271,7 +1274,7 @@ let filteredOrders = expandedOrders.filter(wo => matchesFilter(wo));
       id: currentEvent ? currentEvent.extendedProps.id : `wo-${Date.now()}`,
       title: form.orderTitle.value.trim(),
       desc: form.orderDesc.value.trim(),
-      date: form.orderDate.value,
+      date: form.orderDateTime.value,
       part: form.orderPart.value,
       operator: form.orderOperator.value,
       status: form.orderStatus.value,
