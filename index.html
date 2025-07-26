@@ -1197,7 +1197,7 @@ let filteredOrders = expandedOrders.filter(wo => matchesFilter(wo));
     currentEvent = event;
     form.reset();
     deleteBtn.style.display = 'none';
-    chatPanel.style.display = 'none';
+    chatPanel.style.display = 'flex';
     chatMessages.innerHTML = '';
     chatInput.value = '';
     sendChatBtn.disabled = true;
@@ -1223,11 +1223,13 @@ let filteredOrders = expandedOrders.filter(wo => matchesFilter(wo));
 
       // Load chat for this event
       const eventId = event.extendedProps.id;
-      if (eventId && chatData[eventId]) {
-        renderChatMessages(eventId);
-        chatPanel.style.display = 'flex';
-        chatInput.focus();
-      }
+if (eventId) {
+  renderChatMessages(eventId);
+  chatPanel.style.display = 'flex';
+  chatInput.focus();
+} else {
+  chatPanel.style.display = 'none';
+}
     } else {
       // New mode
       document.getElementById('modalTitle').textContent = 'Add Work Order';
